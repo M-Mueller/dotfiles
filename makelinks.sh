@@ -1,7 +1,6 @@
 #!/bin/sh
 
 DOTFILES=`pwd`
-echo $DOTFILES
 
 cd ~
 ln -s $DOTFILES/.gitconfig

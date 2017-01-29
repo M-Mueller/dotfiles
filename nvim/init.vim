@@ -1,3 +1,4 @@
+" load vim-plug plugins
 call plug#begin()
 Plug 'vim-scripts/indentpython.vim'
 Plug 'Valloric/YouCompleteMe'
