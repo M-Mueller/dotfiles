@@ -1,0 +1,19 @@
+# This is Git's per-user configuration file.
+[user]
+	name = M-Mueller
+	email = M-Mueller@users.noreply.github.com
+[core]
+	editor = nvim
+	excludesfile = /home/markus/.gitignore
+[color]
+	ui = auto
+[difftool]
+	tool = meld
+[alias]
+	ci = commit
+	co = checkout
+	st = status
+[push]
+	default = simple
+[credential]
+	helper = /usr/share/git/credential/gnome-keyring/git-credential-gnome-keyring
