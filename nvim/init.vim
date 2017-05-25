@@ -53,6 +53,9 @@ let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
 set encoding=utf-8
 set nu  "show line numbers
 
+" enable mouse support everywhere
+set mouse=a
+
 " ignore case if search is only lowercase 
 set ignorecase
 set smartcase
