@@ -26,6 +26,10 @@ set foldlevel=99
 " Enable folding with the spacebar
 nnoremap <space> za
 
+" Navigate by soft line wraps
+nmap <silent> j gj
+nmap <silent> k gk
+
 " Set PEP8 indentation
 au BufNewFile,BufRead *.py set
     \ tabstop=4
