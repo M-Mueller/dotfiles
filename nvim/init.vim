@@ -59,6 +59,10 @@ set foldlevel=99
 " preview :substitude command
 set inccommand=split 
 
+" show whitespace characters
+set list
+set list listchars=tab:→\ ,space:·
+
 let python_highlight_all=1
 syntax on
 
@@ -71,6 +75,13 @@ au BufNewFile,BufRead *.py set
     \ expandtab
     \ autoindent
     \ fileformat=unix
+
+" Set TOML indentation with spaces
+au BufNewFile,BufRead *.toml set
+    \ tabstop=4
+    \ softtabstop=4
+    \ shiftwidth=4
+    \ expandtab
 
 " Color bad whitespace
 " au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
@@ -88,6 +99,9 @@ nnoremap <C-H> <C-W><C-H>
 " Save with C-S
 nnoremap <C-S> :w<CR>
 inoremap <C-S> <ESC>:w<CR>a
+
+" Paste from clipboard with C-V in insert mode
+inoremap <C-V> <ESC>"+pa
 
 " Enable folding with the spacebar
 nnoremap <space> za
