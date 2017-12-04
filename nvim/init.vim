@@ -57,7 +57,9 @@ set foldmethod=indent
 set foldlevel=99
 
 " preview :substitude command
-set inccommand=split 
+if has('nvim')
+    set inccommand=split 
+endif
 
 " show whitespace characters
 set list
