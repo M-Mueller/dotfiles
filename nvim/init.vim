@@ -93,10 +93,10 @@ au BufNewFile,BufRead *.toml set
 " -----------
 
 " Navigations with ctrl
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
+nnoremap <C-J> <C-W>j
+nnoremap <C-K> <C-W>k
+nnoremap <C-L> <C-W>l
+nnoremap <C-H> <C-W>h
 
 " Save with C-S
 nnoremap <C-S> :w<CR>
