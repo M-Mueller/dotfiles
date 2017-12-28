@@ -89,6 +89,7 @@ au BufNewFile,BufRead *.toml set
 au BufNewFile,BufRead *.md,*.txt set
     \ wrap
     \ linebreak
+    \ spell
 
 " Color bad whitespace
 " au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
@@ -107,8 +108,10 @@ nnoremap <C-H> <C-W>h
 nnoremap <C-S> :w<CR>
 inoremap <C-S> <ESC>:w<CR>a
 
-" Paste from clipboard with C-V in insert mode
-inoremap <C-V> <ESC>"+Pa
+" Paste from clipboard in insert mode
+inoremap <C-V> <ESC>"+pa
+" Copy to clipboard in visual mode
+vnoremap <C-C> "+y
 
 " Enable folding with the spacebar
 nnoremap <space> za
