@@ -14,7 +14,7 @@
 [push]
 	default = simple
 [credential]
-	helper = /usr/libexec/git-core/git-credential-gnome-keyring
+	helper = libsecret
 [diff]
 	tool = kdiff3
 [difftool "kdiff3"]
