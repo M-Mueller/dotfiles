@@ -9,11 +9,7 @@ Plug 'timonv/vim-cargo'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'chriskempson/tomorrow-theme', {'rtp': 'vim'}
-"Plug 'scrooloose/syntastic'
-"Plug 'nvie/vim-flake8'
-"Plug 'tpope/vim-fugitive'
-"Plug 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
-"Plug 'peterhoeg/vim-qml'
+Plug 'nvie/vim-flake8'
 call plug#end()
 
 " -----------
@@ -23,15 +19,22 @@ colorscheme Tomorrow-Night
 
 " YouCompleteMe configuration
 let g:ycm_autoclose_preview_window_after_completion=1
-map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 " NERDTree config
-let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
+let NERDTreeIgnore=['\.pyc$', '\~$', '__pycache__']
 
 " airline config
 " mode is already displayed by airline
 set noshowmode
 let g:airline_powerline_fonts = 1
+" show bufferline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline#extensions#tabline#left_sep = ' '
+
+" flake8 config
+" Run checks when saving py files
+autocmd BufWritePost *.py call Flake8()
 
 " -----------
 " Misc config
@@ -40,6 +43,9 @@ set encoding=utf-8
 
 "show line numbers
 set nu  
+
+" Allow hiding modified buffers
+set hidden
 
 " enable mouse support everywhere
 set mouse=a
@@ -98,6 +104,9 @@ au BufNewFile,BufRead *.md,*.txt set
 " Key mapping
 " -----------
 
+" Set leader to ,
+let mapleader = ","
+
 " Navigations with ctrl
 nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
@@ -120,9 +129,29 @@ nnoremap <space> za
 nnoremap <silent> j gj
 nnoremap <silent> k gk
 
+" Show buffer list and select buffer
+nnoremap <leader>b :buffers<CR>:buffer<Space>
+" Switch between recent buffers
+nnoremap <C-Space> :b#<CR>
+" Move to buffer to left/right
+nnoremap <A-h> :bp<CR>
+nnoremap <A-l> :bn<CR>
+
+" NERDTree shortcut
+nnoremap <leader>n :NERDTree<CR>
+
 " Execute current file with F5
 autocmd filetype python nnoremap <F5> :w <bar> exec '!python '.shellescape('%')<CR>
 autocmd filetype qml nnoremap <F5> :w <bar> exec '!qml '.shellescape('%')<CR>
 " Execute main with F6
 autocmd filetype python nnoremap <F6> :w <bar> exec '!python main.py'<CR>
 autocmd filetype qml nnoremap <F6> :w <bar> exec '!qml main.qml'<CR>
+
+" Start flask server with :FlaskRun
+command! FlaskRun :!FLASK_APP=% flask-3 run --host=0.0.0.0
+" Run the current file through pythons unittest
+command! -nargs=* PythonTest :!python3 -m unittest <f-args> %
+" Run all tests in the tests directory of the working directory
+command! -nargs=* PythonTestAll :!python3 -m unittest <f-args> tests/test_*.py
+" Show documentation for object under cursor
+command! GetDoc :YcmCompleter GetDoc
