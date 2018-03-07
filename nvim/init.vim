@@ -97,6 +97,11 @@ au BufNewFile,BufRead *.md,*.txt set
     \ linebreak
     \ spell
 
+" Wrap words in text files
+au BufNewFile,BufRead CMakeLists.txt set
+    \ nowrap
+    \ nospell
+
 " Color bad whitespace
 " au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 
