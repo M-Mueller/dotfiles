@@ -1,15 +1,22 @@
 " load vim-plug plugins
 call plug#begin()
-Plug 'vim-scripts/indentpython.vim'
-Plug 'Valloric/YouCompleteMe'
-Plug 'scrooloose/nerdtree'
-Plug 'kien/ctrlp.vim'
-Plug 'rust-lang/rust.vim'
-Plug 'timonv/vim-cargo'
+Plug 'chriskempson/tomorrow-theme', {'rtp': 'vim'}
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'chriskempson/tomorrow-theme', {'rtp': 'vim'}
+Plug 'scrooloose/nerdtree'
+Plug 'kien/ctrlp.vim'
+if has('nvim')
+	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+endif
+" Python
+Plug 'vim-scripts/indentpython.vim'
 Plug 'nvie/vim-flake8'
+if has('nvim')
+	Plug 'zchee/deoplete-jedi'
+endif
+" Rust
+Plug 'rust-lang/rust.vim'
+Plug 'timonv/vim-cargo'
 call plug#end()
 
 " -----------
@@ -17,8 +24,11 @@ call plug#end()
 " -----------
 colorscheme Tomorrow-Night
 
-" YouCompleteMe configuration
-let g:ycm_autoclose_preview_window_after_completion=1
+" deoplete config
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#sources#jedi#show_docstring = 1
+" close preview after completion
+autocmd CompleteDone * silent! pclose!
 
 " NERDTree config
 let NERDTreeIgnore=['\.pyc$', '\~$', '__pycache__']
@@ -141,6 +151,11 @@ nnoremap <C-Space> :b#<CR>
 " Move to buffer to left/right
 nnoremap <A-h> :bp<CR>
 nnoremap <A-l> :bn<CR>
+" Close buffer without closing split
+nnoremap <C-X> :b#<bar>bd#<CR>
+
+" Select next completion with tab
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 
 " NERDTree shortcut
 nnoremap <leader>n :NERDTree<CR>
