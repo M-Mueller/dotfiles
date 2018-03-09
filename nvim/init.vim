@@ -7,13 +7,15 @@ Plug 'scrooloose/nerdtree'
 Plug 'kien/ctrlp.vim'
 if has('nvim')
 	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+	Plug 'neomake/neomake'
 endif
+
 " Python
 Plug 'vim-scripts/indentpython.vim'
-Plug 'nvie/vim-flake8'
 if has('nvim')
 	Plug 'zchee/deoplete-jedi'
 endif
+
 " Rust
 Plug 'rust-lang/rust.vim'
 Plug 'timonv/vim-cargo'
@@ -30,6 +32,9 @@ let g:deoplete#sources#jedi#show_docstring = 1
 " close preview after completion
 autocmd CompleteDone * silent! pclose!
 
+" neomake config
+call neomake#configure#automake('w')
+
 " NERDTree config
 let NERDTreeIgnore=['\.pyc$', '\~$', '__pycache__']
 
@@ -41,10 +46,6 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline#extensions#tabline#left_sep = ' '
-
-" flake8 config
-" Run checks when saving py files
-autocmd BufWritePost *.py call Flake8()
 
 " -----------
 " Misc config
@@ -158,7 +159,7 @@ nnoremap <C-X> :b#<bar>bd#<CR>
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 
 " NERDTree shortcut
-nnoremap <leader>n :NERDTree<CR>
+nnoremap <leader>n :NERDTreeToggle<CR>
 
 " Execute current file with F5
 autocmd filetype python nnoremap <F5> :w <bar> exec '!python '.shellescape('%')<CR>
