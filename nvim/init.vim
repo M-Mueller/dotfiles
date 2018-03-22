@@ -121,7 +121,7 @@ au BufNewFile,BufRead CMakeLists.txt set
 " -----------
 
 " Set leader to ,
-let mapleader = ","
+let mapleader = " "
 
 " Navigations with ctrl
 nnoremap <C-J> <C-W>j
@@ -139,7 +139,7 @@ inoremap <C-V> <ESC>"+pa
 vnoremap <C-C> "+y
 
 " Enable folding with the spacebar
-nnoremap <space> za
+nnoremap <leader>f za
 
 " Navigate by soft line wraps
 nnoremap <silent> j gj
@@ -148,7 +148,7 @@ nnoremap <silent> k gk
 " Show buffer list and select buffer
 nnoremap <leader>b :buffers<CR>:buffer<Space>
 " Switch between recent buffers
-nnoremap <C-Space> :b#<CR>
+nnoremap <leader><Tab> :b#<CR>
 " Move to buffer to left/right
 nnoremap <A-h> :bp<CR>
 nnoremap <A-l> :bn<CR>
