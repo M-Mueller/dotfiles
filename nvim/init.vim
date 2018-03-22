@@ -176,3 +176,24 @@ command! -nargs=* PythonTest :!python3 -m unittest <f-args> %
 command! -nargs=* PythonTestAll :!python3 -m unittest <f-args> tests/test_*.py
 " Show documentation for object under cursor
 command! GetDoc :YcmCompleter GetDoc
+
+function CMakeBuildFolder(config)
+	let folder = fnamemodify(getcwd(), ':t')
+	return "../build-" . folder . "-" . a:config
+endfunction
+
+function CMakeSelectConfig(config)
+	let folder = CMakeBuildFolder(a:config)
+	let &makeprg = "cmake --build " . folder
+endfunction
+
+function CMakeInitConfig(config)
+	let build_folder = CMakeBuildFolder(a:config)
+	let src_folder = fnamemodify(getcwd(), ':t')
+	silent execute "!mkdir -p " . build_folder
+	execute ":edit term://cd " . build_folder . " && ccmake ../" . src_folder . " | :startinsert"
+	call CMakeSelectConfig(a:config)
+endfunction
+
+command! -nargs=1 CMakeSelect :call CMakeSelectConfig(<f-args>)
+command! -nargs=1 CMakeInit :call CMakeInitConfig(<f-args>)
