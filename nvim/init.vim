@@ -95,8 +95,8 @@ au BufNewFile,BufRead *.py set
     \ autoindent
     \ fileformat=unix
 
-" Set TOML indentation with spaces
-au BufNewFile,BufRead *.toml set
+" File types with space indentation
+au BufNewFile,BufRead *.toml,*.yaml,Dockerfile set
     \ tabstop=4
     \ softtabstop=4
     \ shiftwidth=4
@@ -108,7 +108,7 @@ au BufNewFile,BufRead *.md,*.txt set
     \ linebreak
     \ spell
 
-" Wrap words in text files
+" CMakeLists are no regular txt files
 au BufNewFile,BufRead CMakeLists.txt set
     \ nowrap
     \ nospell
