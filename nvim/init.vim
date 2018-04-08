@@ -43,6 +43,7 @@ if has('nvim')
         \ 'cursor_wrap': 'true',
         \ 'highlight_matched_range': 'None',
         \ 'highlight_matched_char': 'Underlined',
+        \ 'highlight_mode_insert': 'PMenuSel',
         \ })
     " use ag for search files and grep
     call denite#custom#var('file_rec', 'command',
@@ -179,7 +180,7 @@ if has('nvim')
     " denite shortcuts
     nnoremap <C-p> :Denite file_rec -auto-preview -vertical-preview<CR>
     nnoremap <leader><Tab> :b#<CR>
-    nnoremap <leader><space> :Denite buffer -auto-preview -vertical-preview<CR>
+    nnoremap <leader><space> :Denite buffer -vertical-preview<CR>
     nnoremap <leader>s :Denite grep -auto-preview -vertical-preview<CR>
     call denite#custom#map('insert', '<Tab>', '<denite:move_to_next_line>', 'noremap')
     call denite#custom#map('insert', '<Up>', '<denite:move_to_previous_line>', 'noremap')
@@ -202,17 +203,17 @@ command! -nargs=* PythonTestAll :!python3 -m pytest
 " Run doctest on the current file
 command! -nargs=* PythonDocTest :!python3 -m doctest %
 
-function CMakeBuildFolder(config)
+function! CMakeBuildFolder(config)
 	let folder = fnamemodify(getcwd(), ':t')
 	return "../build-" . folder . "-" . a:config
 endfunction
 
-function CMakeSelectConfig(config)
+function! CMakeSelectConfig(config)
 	let folder = CMakeBuildFolder(a:config)
 	let &makeprg = "cmake --build " . folder
 endfunction
 
-function CMakeInitConfig(config)
+function! CMakeInitConfig(config)
 	let build_folder = CMakeBuildFolder(a:config)
 	let src_folder = fnamemodify(getcwd(), ':t')
 	silent execute "!mkdir -p " . build_folder
