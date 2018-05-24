@@ -22,6 +22,9 @@ endif
 " Rust
 Plug 'rust-lang/rust.vim'
 Plug 'timonv/vim-cargo'
+
+" OpenGL
+Plug 'tikhomirov/vim-glsl'
 call plug#end()
 
 " -----------
@@ -121,6 +124,16 @@ au BufNewFile,BufRead *.py set
     \ shiftwidth=4
     \ textwidth=79
     \ expandtab
+    \ autoindent
+    \ fileformat=unix
+
+" Use tabs in C/C++ files
+au BufNewFile,BufRead *.c,*.cpp,*.h,*.hpp set
+    \ tabstop=4
+    \ softtabstop=4
+    \ shiftwidth=4
+    \ textwidth=79
+    \ noexpandtab
     \ autoindent
     \ fileformat=unix
 
