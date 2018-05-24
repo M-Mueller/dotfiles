@@ -38,6 +38,7 @@ alias v="nvim"
 alias vim="nvim"
 alias open="xdg-open"
 alias kdiff="kdiff3-qt"
+alias ipy="ipython3"
 
 #-----------------------------
 # Environment variables
@@ -53,12 +54,14 @@ bindkey '^?' backward-delete-char
 bindkey '^[[5~' up-line-or-history
 bindkey '^[[3~' delete-char
 bindkey '^[[6~' down-line-or-history
-bindkey '^[[A' up-line-or-search
+bindkey '^[[A' history-substring-search-up
 bindkey '^[[D' backward-char
-bindkey '^[[B' down-line-or-search
+bindkey '^[[B' history-substring-search-down
 bindkey '^[[C' forward-char 
 bindkey "^[[H" beginning-of-line
 bindkey "^[[F" end-of-line
+bindkey '^[OA' history-substring-search-up
+bindkey '^[OB' history-substring-search-down
 
 #-----------------------------
 # Prompt
@@ -69,7 +72,12 @@ function git_prompt_info {
 	if [[ $? -eq 0 ]]; then
 		local color="green"
 		local icon=""
-		if [[ $(git status -s | wc -l) -ne 0 ]]; then
+		local git_status
+		# try to get the status in under a second
+		git_status=$(timeout 1 git status -s)
+		if [[ $? -ne 0 ]]; then
+			icon="??"
+		elif [[ $($git_status | wc -l) -ne 0 ]]; then
 			color="yellow"
 			icon="±"
 		fi
@@ -77,7 +85,6 @@ function git_prompt_info {
 	fi
 }
 function prompt {
-	local last_exit_code=$?
 	echo
 	echo %B%F{blue}%~%f%b$(git_prompt_info)
 	# color prompt start depending on last return value
