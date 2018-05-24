@@ -93,6 +93,15 @@ set hidden
 " enable mouse support everywhere
 set mouse=a
 
+" automatically reload changed files
+set autoread
+
+" always show one line before and after the cursor
+set scrolloff=1
+
+" open new splits on the right by default
+set splitright
+
 " ignore case if search is only lowercase
 set ignorecase
 set smartcase
@@ -202,6 +211,7 @@ if has('nvim')
     call denite#custom#map('insert', '<Tab>', '<denite:move_to_next_line>', 'noremap')
     call denite#custom#map('insert', '<Up>', '<denite:move_to_previous_line>', 'noremap')
     call denite#custom#map('insert', '<Down>', '<denite:move_to_next_line>', 'noremap')
+    call denite#custom#map('insert', '<C-Space>', '<denite:choose_action>', 'noremap')
 endif
 
 " Execute current file with F5
