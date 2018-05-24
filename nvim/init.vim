@@ -14,6 +14,7 @@ endif
 
 " Python
 Plug 'vim-scripts/indentpython.vim'
+Plug 'davidhalter/jedi-vim'
 if has('nvim')
     Plug 'zchee/deoplete-jedi'
 endif
@@ -58,6 +59,9 @@ if has('nvim')
     " neomake config
     call neomake#configure#automake('w')
     let g:neomake_python_exe = 'python3'
+
+    " completion is provided by deoplete
+    let g:jedi#completions_enabled = 0
 endif
 
 " NERDTree config
