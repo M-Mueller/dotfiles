@@ -6,9 +6,9 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tpope/vim-fugitive'
+Plug 'junegunn/fzf.vim'
 if has('nvim')
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
     Plug 'neomake/neomake'
 endif
 
@@ -40,24 +40,6 @@ if has('nvim')
     let g:deoplete#sources#jedi#show_docstring = 1
     " close preview after completion
     autocmd CompleteDone * silent! pclose!
-
-    " denite config
-    call denite#custom#option('default', {
-        \ 'prompt': '❯',
-        \ 'cursor_wrap': 'true',
-        \ 'highlight_matched_range': 'None',
-        \ 'highlight_matched_char': 'Underlined',
-        \ 'highlight_mode_insert': 'PMenuSel',
-        \ })
-    " use ag for search files and grep
-    call denite#custom#var('file_rec', 'command',
-                \ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
-    call denite#custom#var('grep', 'command', ['ag'])
-    call denite#custom#var('grep', 'default_opts', ['-i', '--vimgrep'])
-    call denite#custom#var('grep', 'recursive_opts', [])
-    call denite#custom#var('grep', 'pattern_opt', [])
-    call denite#custom#var('grep', 'separator', ['--'])
-    call denite#custom#var('grep', 'final_opts', [])
 
     " neomake config
     call neomake#configure#automake('w')
@@ -202,17 +184,12 @@ inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 " NERDTree shortcut
 nnoremap <leader>n :NERDTreeToggle<CR>
 
-if has('nvim')
-    " denite shortcuts
-    nnoremap <C-p> :Denite file_rec -auto-preview -vertical-preview<CR>
-    nnoremap <leader><Tab> :b#<CR>
-    nnoremap <leader><space> :Denite buffer -vertical-preview<CR>
-    nnoremap <leader>s :Denite grep -auto-preview -vertical-preview<CR>
-    call denite#custom#map('insert', '<Tab>', '<denite:move_to_next_line>', 'noremap')
-    call denite#custom#map('insert', '<Up>', '<denite:move_to_previous_line>', 'noremap')
-    call denite#custom#map('insert', '<Down>', '<denite:move_to_next_line>', 'noremap')
-    call denite#custom#map('insert', '<C-Space>', '<denite:choose_action>', 'noremap')
-endif
+" Open previous buffer
+nnoremap <leader><Tab> :b#<CR>
+
+" Fuzzy finder
+nnoremap <C-p> :Files<CR>
+nnoremap <leader><space> :Buffers<CR>
 
 " Execute current file with F5
 autocmd filetype python nnoremap <F5> :w <bar> exec '!python '.shellescape('%')<CR>
