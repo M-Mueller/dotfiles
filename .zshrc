@@ -77,7 +77,7 @@ function git_prompt_info {
 		git_status=$(timeout 1 git status -s)
 		if [[ $? -ne 0 ]]; then
 			icon="??"
-		elif [[ $(echo $git_status | wc -l) -ne 0 ]]; then
+		elif [[ $(echo $git_status | wc -w) -ne 0 ]]; then
 			color="yellow"
 			icon="±"
 		fi
