@@ -30,6 +30,7 @@ unsetopt appendhistory beep extendedglob
 # Plugins
 #-----------------------------
 source ~/.config/zsh/zsh-history-substring-search.zsh
+source ~/.config/zsh/expand-multiple-dots.zsh
 
 #-----------------------------
 # Aliases
