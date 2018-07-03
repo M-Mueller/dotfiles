@@ -47,6 +47,7 @@ if has('nvim')
 
     " completion is provided by deoplete
     let g:jedi#completions_enabled = 0
+    let g:jedi#max_doc_height = 15
 endif
 
 " NERDTree config
@@ -75,8 +76,9 @@ set hidden
 " enable mouse support everywhere
 set mouse=a
 
-" automatically reload changed files
+" automatically reload changed files when gaining focus
 set autoread
+au FocusGained,BufEnter * :silent! !
 
 " always show one line before and after the cursor
 set scrolloff=1
@@ -190,6 +192,8 @@ nnoremap <leader><Tab> :b#<CR>
 " Fuzzy finder
 nnoremap <C-p> :Files<CR>
 nnoremap <leader><space> :Buffers<CR>
+
+autocmd filetype python nnoremap <F1> :call jedi#show_documentation()<cr>
 
 " Execute current file with F5
 autocmd filetype python nnoremap <F5> :w <bar> exec '!python '.shellescape('%')<CR>

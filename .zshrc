@@ -22,8 +22,8 @@ compinit
 HISTFILE=~/.zhistory
 HISTSIZE=10000
 SAVEHIST=10000
-setopt autocd nomatch
-unsetopt appendhistory beep extendedglob
+setopt autocd nomatch appendhistory incappendhistory 
+unsetopt beep extendedglob
 # End of lines configured by zsh-newuser-install
 
 #-----------------------------
@@ -40,6 +40,7 @@ alias vim="nvim"
 alias open="xdg-open"
 alias kdiff="kdiff3-qt"
 alias ipy="ipython3"
+alias trash="gvfs-trash"
 
 #-----------------------------
 # Environment variables
