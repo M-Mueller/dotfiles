@@ -25,6 +25,14 @@ Plug 'timonv/vim-cargo'
 
 " OpenGL
 Plug 'tikhomirov/vim-glsl'
+
+" Web
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
+Plug 'othree/csscomplete.vim'
+if has('nvim')
+    Plug 'carlitux/deoplete-ternjs'
+endif
 call plug#end()
 
 " -----------
@@ -40,6 +48,9 @@ if has('nvim')
     let g:deoplete#sources#jedi#show_docstring = 1
     " close preview after completion
     autocmd CompleteDone * silent! pclose!
+
+    let g:deoplete#sources#ternjs#filetypes = ['jsx', 'javascript.jsx']
+    let g:deoplete#sources#ternjs#tern_bin = '/usr/bin/ternjs'
 
     " neomake config
     call neomake#configure#automake('w')
@@ -61,6 +72,13 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline#extensions#tabline#left_sep = ' '
+
+" fzf
+" Show preview in Files and Ag
+command! -bang -nargs=? -complete=dir Files
+  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+command! -bang -nargs=* Ag
+  \ call fzf#vim#ag(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 " -----------
 " Misc config
@@ -115,6 +133,15 @@ au BufNewFile,BufRead *.py set
     \ tabstop=4
     \ softtabstop=4
     \ shiftwidth=4
+    \ textwidth=79
+    \ expandtab
+    \ autoindent
+    \ fileformat=unix
+
+au BufNewFile,BufRead *.js,*.jsx set
+    \ tabstop=2
+    \ softtabstop=2
+    \ shiftwidth=2
     \ textwidth=79
     \ expandtab
     \ autoindent
