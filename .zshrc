@@ -35,6 +35,8 @@ source ~/.config/zsh/expand-multiple-dots.zsh
 #-----------------------------
 # Aliases
 #-----------------------------
+alias ls="ls --color=auto"
+alias grep="grep --color=auto"
 alias v="nvim"
 alias vim="nvim"
 alias open="xdg-open"

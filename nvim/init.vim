@@ -26,6 +26,10 @@ Plug 'timonv/vim-cargo'
 " OpenGL
 Plug 'tikhomirov/vim-glsl'
 
+" C++
+Plug 'zchee/deoplete-clang'
+Plug 'Shougo/neoinclude.vim'
+
 " Web
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
@@ -48,6 +52,11 @@ if has('nvim')
     let g:deoplete#sources#jedi#show_docstring = 1
     " close preview after completion
     autocmd CompleteDone * silent! pclose!
+
+    let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-3.8/lib/libclang.so.1'
+    let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-3.8/lib/clang/3.8.0/include'
+
+    autocmd filetype cpp set completeopt -=preview
 
     let g:deoplete#sources#ternjs#filetypes = ['jsx', 'javascript.jsx']
     let g:deoplete#sources#ternjs#tern_bin = '/usr/bin/ternjs'
