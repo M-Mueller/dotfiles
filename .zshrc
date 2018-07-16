@@ -70,6 +70,12 @@ bindkey '^[OB' history-substring-search-down
 #-----------------------------
 # Prompt
 #-----------------------------
+function hostname_prompt_info {
+	# only write hostname in ssh session
+	if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+		echo %F{magenta}%n@%m %f
+	fi
+}
 function git_prompt_info {
 	local branch
 	branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
@@ -90,7 +96,7 @@ function git_prompt_info {
 }
 function prompt {
 	echo
-	echo %B%F{blue}%~%f%b$(git_prompt_info)
+	echo $(hostname_prompt_info)%B%F{blue}%~%f%b$(git_prompt_info)
 	# color prompt start depending on last return value
 	echo '%(?.%F{cyan}.%F{red})❯ %f'
 }
