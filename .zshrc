@@ -75,6 +75,13 @@ function hostname_prompt_info {
 	if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
 		echo %F{magenta}%n@%m %f
 	fi
+
+	# write container name if inside container
+	if [ -n "$CONTAINERNAME" ]; then
+		echo %F{magenta}$CONTAINERNAME %f
+	elif [ -e "/.dockerenv" ]; then
+		echo %F{magenta}$HOSTNAME %f
+	fi
 }
 function git_prompt_info {
 	local branch
