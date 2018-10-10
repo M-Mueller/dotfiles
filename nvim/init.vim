@@ -8,15 +8,18 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tpope/vim-fugitive'
 Plug 'junegunn/fzf.vim'
 if has('nvim')
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
     Plug 'neomake/neomake'
+    Plug 'roxma/nvim-yarp'
+    Plug 'ncm2/ncm2'
+    Plug 'ncm2/ncm2-bufword'
+    Plug 'ncm2/ncm2-path'
 endif
 
 " Python
 Plug 'vim-scripts/indentpython.vim'
 Plug 'davidhalter/jedi-vim'
 if has('nvim')
-    Plug 'zchee/deoplete-jedi'
+    Plug 'ncm2/ncm2-jedi'
 endif
 
 " Rust
@@ -27,15 +30,17 @@ Plug 'timonv/vim-cargo'
 Plug 'tikhomirov/vim-glsl'
 
 " C++
-Plug 'zchee/deoplete-clang'
-Plug 'Shougo/neoinclude.vim'
+if has('nvim')
+    Plug 'ncm2/ncm2-pyclang'
+endif
 
 " Web
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 Plug 'othree/csscomplete.vim'
 if has('nvim')
-    Plug 'carlitux/deoplete-ternjs'
+    Plug 'ncm2/ncm2-tern', {'do': 'npm install'}
+    Plug 'ncm2/ncm2-cssomni'
 endif
 call plug#end()
 
@@ -47,25 +52,20 @@ let base16colorspace=256
 set termguicolors
 
 if has('nvim')
-    " deoplete config
-    let g:deoplete#enable_at_startup = 1
-    let g:deoplete#sources#jedi#show_docstring = 1
-    " close preview after completion
-    autocmd CompleteDone * silent! pclose!
+    " ncm2 config
+    autocmd BufEnter * call ncm2#enable_for_buffer()
+    set completeopt=noinsert,menuone,noselect
+    set shortmess+=c
 
-    let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-3.8/lib/libclang.so.1'
-    let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-3.8/lib/clang/3.8.0/include'
-
-    autocmd filetype cpp set completeopt -=preview
-
-    let g:deoplete#sources#ternjs#filetypes = ['jsx', 'javascript.jsx']
-    let g:deoplete#sources#ternjs#tern_bin = '/usr/bin/ternjs'
+    inoremap <C-c> <ESC>
+    inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
     " neomake config
     call neomake#configure#automake('w')
     let g:neomake_python_exe = 'python3'
 
-    " completion is provided by deoplete
+    " completion is provided by other plugin
     let g:jedi#completions_enabled = 0
     let g:jedi#max_doc_height = 15
 endif
@@ -248,21 +248,21 @@ command! -nargs=* PythonTestAll :!python3 -m pytest
 command! -nargs=* PythonDocTest :!python3 -m doctest %
 
 function! CMakeBuildFolder(config)
-	let folder = fnamemodify(getcwd(), ':t')
-	return "../build-" . folder . "-" . a:config
+    let folder = fnamemodify(getcwd(), ':t')
+    return "../build-" . folder . "-" . a:config
 endfunction
 
 function! CMakeSelectConfig(config)
-	let folder = CMakeBuildFolder(a:config)
-	let &makeprg = "cmake --build " . folder
+    let folder = CMakeBuildFolder(a:config)
+    let &makeprg = "cmake --build " . folder
 endfunction
 
 function! CMakeInitConfig(config)
-	let build_folder = CMakeBuildFolder(a:config)
-	let src_folder = fnamemodify(getcwd(), ':t')
-	silent execute "!mkdir -p " . build_folder
-	execute ":edit term://cd " . build_folder . " && ccmake ../" . src_folder . " | :startinsert"
-	call CMakeSelectConfig(a:config)
+    let build_folder = CMakeBuildFolder(a:config)
+    let src_folder = fnamemodify(getcwd(), ':t')
+    silent execute "!mkdir -p " . build_folder
+    execute ":edit term://cd " . build_folder . " && ccmake ../" . src_folder . " | :startinsert"
+    call CMakeSelectConfig(a:config)
 endfunction
 
 command! -nargs=1 CMakeSelect :call CMakeSelectConfig(<f-args>)
