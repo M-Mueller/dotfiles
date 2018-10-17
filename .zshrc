@@ -42,13 +42,13 @@ alias vim="nvim"
 alias open="xdg-open"
 alias kdiff="kdiff3-qt"
 alias ipy="ipython3"
-alias trash="gvfs-trash"
 
 #-----------------------------
 # Environment variables
 #-----------------------------
 export BROWSER="firefox"
 export EDITOR="nvim"
+export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 #-----------------------------
 # Keybindings
@@ -101,6 +101,14 @@ function git_prompt_info {
 		echo  %F{$color}  ${branch} ${icon}%f
 	fi
 }
+function venv_prompt_info {
+	if [[ -n "$VIRTUAL_ENV" ]]; then
+		# Strip out the path and just leave the env name
+		venv="${VIRTUAL_ENV##*/}"
+		echo %F{027} py:%f%F{221}$venv %f
+	fi
+
+}
 function prompt {
 	echo
 	echo $(hostname_prompt_info)%B%F{blue}%~%f%b$(git_prompt_info)
@@ -109,7 +117,7 @@ function prompt {
 }
 function rprompt {
 	# show icon if there are background jobs
-	echo '%F{red}%(1j.⚙.)%f'
+	echo $(venv_prompt_info)'%F{red}%(1j.⚙.)%f'
 }
 
 setopt prompt_subst
