@@ -31,6 +31,9 @@ unsetopt beep extendedglob
 #-----------------------------
 source ~/.config/zsh/zsh-history-substring-search.zsh
 source ~/.config/zsh/expand-multiple-dots.zsh
+if [ -f ~/.config/zsh/generate-password.zsh ]; then
+	source ~/.config/zsh/generate-password.zsh
+fi
 
 #-----------------------------
 # Aliases
@@ -42,6 +45,11 @@ alias vim="nvim"
 alias open="xdg-open"
 alias kdiff="kdiff3-qt"
 alias ipy="ipython3"
+if [ -x "$(command -v gio)" ]; then
+	alias trash="gio trash"
+elif [ -x "$(command -v gvfs-trash)" ]; then
+	alias trash="gvfs-trash"
+fi
 
 #-----------------------------
 # Environment variables
