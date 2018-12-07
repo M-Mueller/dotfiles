@@ -21,6 +21,8 @@ compinit
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.zhistory
 HISTSIZE=10000
+HIST_INGORE_ALL_DUPS=1
+HIST_FIND_NO_DUPS=1
 SAVEHIST=10000
 setopt autocd nomatch appendhistory incappendhistory 
 unsetopt beep extendedglob
