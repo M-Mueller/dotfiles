@@ -41,6 +41,7 @@ fi
 # Aliases
 #-----------------------------
 alias ls="ls --color=auto"
+alias lsl="ls -l"
 alias grep="grep --color=auto"
 alias v="nvim"
 alias vim="nvim"
@@ -52,6 +53,7 @@ if [ -x "$(command -v gio)" ]; then
 elif [ -x "$(command -v gvfs-trash)" ]; then
 	alias trash="gvfs-trash"
 fi
+alias pyclean="find . -type d -name '__pycache__' -exec rm -r {} +"
 
 #-----------------------------
 # Environment variables
