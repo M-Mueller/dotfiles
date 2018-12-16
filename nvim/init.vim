@@ -6,6 +6,9 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
+Plug 'easymotion/vim-easymotion'
 Plug 'junegunn/fzf.vim'
 if has('nvim')
     Plug 'neomake/neomake'
@@ -108,7 +111,7 @@ set autoread
 au FocusGained,BufEnter * :silent! !
 
 " always show one line before and after the cursor
-set scrolloff=1
+set scrolloff=5
 
 " open new splits on the right by default
 set splitright
@@ -133,6 +136,7 @@ endif
 " show whitespace characters
 set list
 set list listchars=tab:→\ ,space:·
+set cursorline
 
 let python_highlight_all=1
 syntax on
@@ -229,23 +233,22 @@ nnoremap <leader><Tab> :b#<CR>
 nnoremap <C-p> :Files<CR>
 nnoremap <leader><space> :Buffers<CR>
 
-autocmd filetype python nnoremap <F1> :call jedi#show_documentation()<cr>
+" Toglle comment (actually maps <C-/>)
+nmap <C-_> gcc
+vmap <C-_> gc
 
-" Execute current file with F5
-autocmd filetype python nnoremap <F5> :w <bar> exec '!python '.shellescape('%')<CR>
-autocmd filetype qml nnoremap <F5> :w <bar> exec '!qml '.shellescape('%')<CR>
-" Execute main with F6
-autocmd filetype python nnoremap <F6> :w <bar> exec '!python main.py'<CR>
-autocmd filetype qml nnoremap <F6> :w <bar> exec '!qml main.qml'<CR>
+" EasyMotion
+map , <Plug>(easymotion-prefix)
 
-" Start flask server with :FlaskRun
-command! FlaskRun :!FLASK_APP=% flask-3 run --host=0.0.0.0
 " Run the current file through pythons unittest
 command! -nargs=* PythonTest :!python3 -m pytest <f-args> %
 " Run all tests in the tests directory of the working directory
 command! -nargs=* PythonTestAll :!python3 -m pytest
 " Run doctest on the current file
 command! -nargs=* PythonDocTest :!python3 -m doctest %
+
+autocmd filetype python nnoremap <F1> :call jedi#show_documentation()<cr>
+autocmd filetype python nnoremap <F5> :w <bar> :PythonTestAll<CR>
 
 function! CMakeBuildFolder(config)
     let folder = fnamemodify(getcwd(), ':t')
