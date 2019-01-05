@@ -9,6 +9,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'easymotion/vim-easymotion'
+Plug 'FooSoft/vim-argwrap'
 Plug 'junegunn/fzf.vim'
 if has('nvim')
     Plug 'neomake/neomake'
@@ -41,6 +42,7 @@ endif
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 Plug 'othree/csscomplete.vim'
+Plug 'posva/vim-vue'
 if has('nvim')
     Plug 'ncm2/ncm2-tern', {'do': 'npm install'}
     Plug 'ncm2/ncm2-cssomni'
@@ -67,6 +69,8 @@ if has('nvim')
     " neomake config
     call neomake#configure#automake('w')
     let g:neomake_python_exe = 'python3'
+    let g:neomake_javascript_eslint_exe = 'npx'
+    let g:neomake_javascript_eslint_args = ['eslint', '--format=compact']
 
     " completion is provided by other plugin
     let g:jedi#completions_enabled = 0
@@ -141,6 +145,10 @@ set cursorline
 let python_highlight_all=1
 syntax on
 
+" ---------------
+" Filetype config
+" ---------------
+
 " Set PEP8 indentation
 au BufNewFile,BufRead *.py set
     \ tabstop=4
@@ -175,6 +183,12 @@ au BufNewFile,BufRead *.toml,*.yaml,Dockerfile set
     \ tabstop=4
     \ softtabstop=4
     \ shiftwidth=4
+    \ expandtab
+
+au BufNewFile,BufRead *.html,*.htm,*.vue set
+    \ tabstop=2
+    \ softtabstop=2
+    \ shiftwidth=2
     \ expandtab
 
 " Wrap words in text files
@@ -239,6 +253,8 @@ vmap <C-_> gc
 
 " EasyMotion
 map , <Plug>(easymotion-prefix)
+map ,, <Plug>(easymotion-bd-w)
+map ,f <Plug>(easymotion-bd-f)
 
 " Run the current file through pythons unittest
 command! -nargs=* PythonTest :!python3 -m pytest <f-args> %
