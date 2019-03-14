@@ -52,7 +52,7 @@ call plug#end()
 " -----------
 " Plugin config
 " -----------
-colorscheme base16-onedark
+colorscheme base16-ocean
 let base16colorspace=256
 set termguicolors
 
@@ -179,7 +179,7 @@ au BufNewFile,BufRead *.c,*.cpp,*.h,*.hpp set
     \ fileformat=unix
 
 " File types with space indentation
-au BufNewFile,BufRead *.toml,*.yaml,Dockerfile set
+au BufNewFile,BufRead *.toml,*.yaml,*.yml,Dockerfile set
     \ tabstop=4
     \ softtabstop=4
     \ shiftwidth=4
