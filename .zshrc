@@ -78,6 +78,8 @@ bindkey "^[[H" beginning-of-line
 bindkey "^[[F" end-of-line
 bindkey '^[OA' history-substring-search-up
 bindkey '^[OB' history-substring-search-down
+bindkey '^[[1;5D' backward-word
+bindkey '^[[1;5C' forward-word
 
 #-----------------------------
 # Prompt
