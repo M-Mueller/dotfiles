@@ -11,6 +11,7 @@ Plug 'tpope/vim-surround'
 Plug 'easymotion/vim-easymotion'
 Plug 'FooSoft/vim-argwrap'
 Plug 'junegunn/fzf.vim'
+Plug 'sheerun/vim-polyglot'
 if has('nvim')
     Plug 'neomake/neomake'
     Plug 'roxma/nvim-yarp'
@@ -27,11 +28,7 @@ if has('nvim')
 endif
 
 " Rust
-Plug 'rust-lang/rust.vim'
 Plug 'timonv/vim-cargo'
-
-" OpenGL
-Plug 'tikhomirov/vim-glsl'
 
 " C++
 if has('nvim')
@@ -39,10 +36,7 @@ if has('nvim')
 endif
 
 " Web
-Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx'
 Plug 'othree/csscomplete.vim'
-Plug 'posva/vim-vue'
 if has('nvim')
     Plug 'ncm2/ncm2-tern', {'do': 'npm install'}
     Plug 'ncm2/ncm2-cssomni'
@@ -190,6 +184,10 @@ au BufNewFile,BufRead *.html,*.htm,*.vue set
     \ softtabstop=2
     \ shiftwidth=2
     \ expandtab
+
+" Enable completion and linting for vue files
+autocmd BufRead,BufNewFile *.vue setlocal
+    \ filetype=vue.html.javascript.css
 
 " Wrap words in text files
 au BufNewFile,BufRead *.md,*.txt set
