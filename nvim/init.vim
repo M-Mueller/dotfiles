@@ -230,7 +230,7 @@ nnoremap <silent> k gk
 nnoremap <leader><Tab> :b#<CR>
 
 " Close buffer without closing split
-nnoremap <leader>x :b#<bar>bd#<CR>
+nnoremap <leader>x :bp<bar>bd#<CR>
 
 " Select next completion with tab
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
