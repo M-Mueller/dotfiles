@@ -12,8 +12,9 @@ Plug 'easymotion/vim-easymotion'
 Plug 'FooSoft/vim-argwrap'
 Plug 'junegunn/fzf.vim'
 Plug 'sheerun/vim-polyglot'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'w0rp/ale'
 if has('nvim')
-    Plug 'neomake/neomake'
     Plug 'roxma/nvim-yarp'
     Plug 'ncm2/ncm2'
     Plug 'ncm2/ncm2-bufword'
@@ -60,12 +61,6 @@ if has('nvim')
     inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
     inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
-    " neomake config
-    call neomake#configure#automake('w')
-    let g:neomake_python_exe = 'python3'
-    let g:neomake_javascript_eslint_exe = 'npx'
-    let g:neomake_javascript_eslint_args = ['eslint', '--format=compact']
-
     " completion is provided by other plugin
     let g:jedi#completions_enabled = 0
     let g:jedi#max_doc_height = 15
@@ -90,6 +85,16 @@ command! -bang -nargs=? -complete=dir Files
 command! -bang -nargs=* Ag
   \ call fzf#vim#ag(<q-args>, fzf#vim#with_preview(), <bang>0)
 
+" ALE
+let g:ale_sign_error = '✖'
+let g:ale_sign_warning = '⚠'
+" the default error highlight looks bad with the error sign
+highlight link ALEErrorSign SignifySignDelete
+
+let g:ale_linters = {
+\   'python': ['mypy', 'pylint', 'pyls'],
+\}
+
 " -----------
 " Misc config
 " -----------
@@ -108,7 +113,7 @@ set mouse=a
 set autoread
 au FocusGained,BufEnter * :silent! !
 
-" always show one line before and after the cursor
+" always show 5 lines before and after the cursor
 set scrolloff=5
 
 " open new splits on the right by default
@@ -245,7 +250,7 @@ nnoremap <leader><Tab> :b#<CR>
 nnoremap <C-p> :Files<CR>
 nnoremap <leader><space> :Buffers<CR>
 
-" Toglle comment (actually maps <C-/>)
+" Toggle comment (actually maps <C-/>)
 nmap <C-_> gcc
 vmap <C-_> gc
 
@@ -263,6 +268,9 @@ command! -nargs=* PythonDocTest :!python3 -m doctest %
 
 autocmd filetype python nnoremap <F1> :call jedi#show_documentation()<cr>
 autocmd filetype python nnoremap <F5> :w <bar> :PythonTestAll<CR>
+
+command GotoDefinition ALEGoToDefinition
+command FindReferences ALEFindReferences
 
 function! CMakeBuildFolder(config)
     let folder = fnamemodify(getcwd(), ':t')
