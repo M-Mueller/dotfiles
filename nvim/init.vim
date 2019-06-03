@@ -88,11 +88,12 @@ command! -bang -nargs=* Ag
 " ALE
 let g:ale_sign_error = '✖'
 let g:ale_sign_warning = '⚠'
+let g:ale_echo_msg_format = '[%linter%] %code: %%s'
 " the default error highlight looks bad with the error sign
 highlight link ALEErrorSign SignifySignDelete
 
 let g:ale_linters = {
-\   'python': ['mypy', 'pylint', 'pyls'],
+\   'python': ['mypy', 'pyls'],
 \}
 
 " -----------
@@ -195,7 +196,7 @@ autocmd BufRead,BufNewFile *.vue setlocal
     \ filetype=vue.html.javascript.css
 
 " Wrap words in text files
-au BufNewFile,BufRead *.md,*.txt set
+au BufNewFile,BufRead *.md,*.txt,*.rst set
     \ wrap
     \ linebreak
     \ spell
@@ -258,6 +259,9 @@ vmap <C-_> gc
 map , <Plug>(easymotion-prefix)
 map ,, <Plug>(easymotion-bd-w)
 map ,f <Plug>(easymotion-bd-f)
+
+" Leave terminal insert mode
+tnoremap <C-n><C-n> <C-\><C-n>
 
 " Run the current file through pythons unittest
 command! -nargs=* PythonTest :!python3 -m pytest <f-args> %
