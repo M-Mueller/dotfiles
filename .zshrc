@@ -62,6 +62,12 @@ export BROWSER="firefox"
 export EDITOR="nvim"
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
+if [ -x "$(command -v fd)" ]; then
+	# Use fd for fzf if available
+	export FZF_DEFAULT_COMMAND='fd --type file'
+	export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+fi
+
 #-----------------------------
 # Keybindings
 #-----------------------------
