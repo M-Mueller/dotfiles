@@ -11,6 +11,7 @@ Plug 'tpope/vim-surround'
 Plug 'easymotion/vim-easymotion'
 Plug 'FooSoft/vim-argwrap'
 Plug 'junegunn/fzf.vim'
+Plug 'elmcast/elm-vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'w0rp/ale'
@@ -94,7 +95,22 @@ highlight link ALEErrorSign SignifySignDelete
 
 let g:ale_linters = {
 \   'python': ['mypy', 'pyls'],
+\   'vue': ['eslint', 'vls'],
 \}
+
+let g:ale_linter_aliases = {'vue': ['vue', 'javascript']}
+
+let g:ale_fixers = {
+\   'javascript': ['eslint'],
+\}
+
+" Multiple cursors
+let g:multi_cursor_exit_from_visual_mode = 0
+let g:multi_cursor_exit_from_insert_mode = 0
+
+" elm
+let g:polyglot_disabled = ['elm']
+let g:elm_setup_keybindings = 0
 
 " -----------
 " Misc config
@@ -154,7 +170,6 @@ au BufNewFile,BufRead *.py set
     \ tabstop=4
     \ softtabstop=4
     \ shiftwidth=4
-    \ textwidth=79
     \ expandtab
     \ autoindent
     \ fileformat=unix
@@ -163,7 +178,6 @@ au BufNewFile,BufRead *.js,*.jsx set
     \ tabstop=2
     \ softtabstop=2
     \ shiftwidth=2
-    \ textwidth=79
     \ expandtab
     \ autoindent
     \ fileformat=unix
@@ -173,7 +187,6 @@ au BufNewFile,BufRead *.c,*.cpp,*.h,*.hpp set
     \ tabstop=4
     \ softtabstop=4
     \ shiftwidth=4
-    \ textwidth=79
     \ noexpandtab
     \ autoindent
     \ fileformat=unix
