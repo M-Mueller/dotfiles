@@ -61,6 +61,7 @@ alias pyclean="find . -type d -name '__pycache__' -exec rm -r {} +"
 export BROWSER="firefox"
 export EDITOR="nvim"
 export VIRTUAL_ENV_DISABLE_PROMPT=1
+export PATH=$PATH:~/.local/bin
 
 if [ -x "$(command -v fd)" ]; then
 	# Use fd for fzf if available
