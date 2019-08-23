@@ -11,7 +11,6 @@ Plug 'tpope/vim-surround'
 Plug 'easymotion/vim-easymotion'
 Plug 'FooSoft/vim-argwrap'
 Plug 'junegunn/fzf.vim'
-Plug 'elmcast/elm-vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'w0rp/ale'
@@ -96,12 +95,14 @@ highlight link ALEErrorSign SignifySignDelete
 let g:ale_linters = {
 \   'python': ['mypy', 'pyls'],
 \   'vue': ['eslint', 'vls'],
+\   'elm': ['elm_ls'],
 \}
 
 let g:ale_linter_aliases = {'vue': ['vue', 'javascript']}
 
 let g:ale_fixers = {
 \   'javascript': ['eslint'],
+\   'elm': ['elm-format'],
 \}
 
 " Multiple cursors
@@ -109,8 +110,13 @@ let g:multi_cursor_exit_from_visual_mode = 0
 let g:multi_cursor_exit_from_insert_mode = 0
 
 " elm
-let g:polyglot_disabled = ['elm']
+let g:ale_elm_ls_use_global = 1
+let g:ale_elm_ls_elm_path = "elm"
+let g:ale_elm_ls_elm_format_path = "elm-format"
+let g:ale_elm_ls_elm_test_path = "elm-test"
+let g:ale_elm_ls_executable = "elm-language-server"
 let g:elm_setup_keybindings = 0
+let g:elm_format_fail_silently = 1
 
 " -----------
 " Misc config
@@ -272,6 +278,9 @@ vmap <C-_> gc
 map , <Plug>(easymotion-prefix)
 map ,, <Plug>(easymotion-bd-w)
 map ,f <Plug>(easymotion-bd-f)
+
+" Goto definition
+nnoremap gd :ALEGoToDefinition<CR>
 
 " Leave terminal insert mode
 tnoremap <C-n><C-n> <C-\><C-n>
