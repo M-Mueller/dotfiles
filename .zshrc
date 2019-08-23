@@ -54,6 +54,9 @@ elif [ -x "$(command -v gvfs-trash)" ]; then
 	alias trash="gvfs-trash"
 fi
 alias pyclean="find . -type d -name '__pycache__' -exec rm -r {} +"
+if [ -x "$(command -v nodejs-yarn)" ]; then
+	alias yarn="nodejs-yarn"
+fi
 
 #-----------------------------
 # Environment variables
