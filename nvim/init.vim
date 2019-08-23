@@ -149,6 +149,8 @@ set smartcase
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
+set expandtab
+set autoindent
 
 " Enable folding
 set foldmethod=indent
@@ -171,59 +173,17 @@ syntax on
 " Filetype config
 " ---------------
 
-" Set PEP8 indentation
-au BufNewFile,BufRead *.py set
-    \ tabstop=4
-    \ softtabstop=4
-    \ shiftwidth=4
-    \ expandtab
-    \ autoindent
-    \ fileformat=unix
-
-au BufNewFile,BufRead *.js,*.jsx set
+autocmd FileType javascript setlocal
     \ tabstop=2
     \ softtabstop=2
     \ shiftwidth=2
-    \ expandtab
-    \ autoindent
-    \ fileformat=unix
 
-" Use tabs in C/C++ files
-au BufNewFile,BufRead *.c,*.cpp,*.h,*.hpp set
-    \ tabstop=4
-    \ softtabstop=4
-    \ shiftwidth=4
+autocmd FileType cpp setlocal
     \ noexpandtab
-    \ autoindent
-    \ fileformat=unix
-
-" File types with space indentation
-au BufNewFile,BufRead *.toml,*.yaml,*.yml,Dockerfile set
-    \ tabstop=4
-    \ softtabstop=4
-    \ shiftwidth=4
-    \ expandtab
-
-au BufNewFile,BufRead *.html,*.htm,*.vue set
-    \ tabstop=2
-    \ softtabstop=2
-    \ shiftwidth=2
-    \ expandtab
 
 " Enable completion and linting for vue files
 autocmd BufRead,BufNewFile *.vue setlocal
     \ filetype=vue.html.javascript.css
-
-" Wrap words in text files
-au BufNewFile,BufRead *.md,*.txt,*.rst set
-    \ wrap
-    \ linebreak
-    \ spell
-
-" CMakeLists are no regular txt files
-au BufNewFile,BufRead CMakeLists.txt set
-    \ nowrap
-    \ nospell
 
 " -----------
 " Key mapping
