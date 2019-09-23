@@ -1,5 +1,6 @@
 set fish_greeting ""
 
+set --export PATH $PATH ~/.local/bin
 set --export BROWSER "firefox"
 set --export EDITOR "vim"
 set --export VISUAL "vim"
@@ -24,6 +25,10 @@ if test -x (command -v gio)
 	alias trash="gio trash"
 else if test -x (command -v gvfs-trash)
 	alias trash="gvfs-trash"
+end
+
+if test -x (command -v nodejs-yarn)
+	alias yarn "nodejs-yarn"
 end
 
 set fish_prompt_pwd_dir_length 0
