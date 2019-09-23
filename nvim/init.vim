@@ -13,43 +13,32 @@ Plug 'FooSoft/vim-argwrap'
 Plug 'junegunn/fzf.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'terryma/vim-multiple-cursors'
-Plug 'w0rp/ale'
 if has('nvim')
     Plug 'roxma/nvim-yarp'
     Plug 'ncm2/ncm2'
     Plug 'ncm2/ncm2-bufword'
     Plug 'ncm2/ncm2-path'
+
+    Plug 'autozimu/LanguageClient-neovim', {
+        \ 'branch': 'next',
+        \ 'do': 'bash install.sh',
+        \ }
 endif
 
 " Python
 Plug 'vim-scripts/indentpython.vim'
 Plug 'davidhalter/jedi-vim'
-if has('nvim')
-    Plug 'ncm2/ncm2-jedi'
-endif
 
 " Rust
 Plug 'timonv/vim-cargo'
 
-" C++
-if has('nvim')
-    Plug 'ncm2/ncm2-pyclang'
-endif
-
 " Web
 Plug 'othree/csscomplete.vim'
-if has('nvim')
-    Plug 'ncm2/ncm2-tern', {'do': 'npm install'}
-    Plug 'ncm2/ncm2-cssomni'
-endif
 call plug#end()
 
 " -----------
 " Plugin config
 " -----------
-colorscheme base16-ocean
-let base16colorspace=256
-set termguicolors
 
 if has('nvim')
     " ncm2 config
@@ -60,6 +49,27 @@ if has('nvim')
     inoremap <C-c> <ESC>
     inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
     inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+    " LSP config
+    let g:LanguageClient_serverCommands = {
+    \ 'python': ['pyls'],
+    \ 'elm': ['elm-language-server', '--stdio'],
+    \ }
+
+    let g:LanguageClient_rootMarkers = {
+    \ 'elm': ['elm.json'],
+    \ }
+
+    let g:LanguageClient_loggingFile = '/tmp/nvim-lsp'
+    let g:LanguageClient_settingsPath = '~/.config/nvim/lsp.json'
+
+    let g:LanguageClient_virtualTextPrefix = '> '
+    let g:LanguageClient_diagnosticsDisplay = {
+    \ 1: { "virtualTexthl": "VirtualError", },
+    \ 2: { "virtualTexthl": "VirtualTodo", },
+    \ 3: { "virtualTexthl": "VirtualTodo", },
+    \ 4: { "virtualTexthl": "VirtualTodo", },
+    \ }
 
     " completion is provided by other plugin
     let g:jedi#completions_enabled = 0
@@ -85,26 +95,6 @@ command! -bang -nargs=? -complete=dir Files
 command! -bang -nargs=* Ag
   \ call fzf#vim#ag(<q-args>, fzf#vim#with_preview(), <bang>0)
 
-" ALE
-let g:ale_sign_error = '✖'
-let g:ale_sign_warning = '⚠'
-let g:ale_echo_msg_format = '[%linter%] %code: %%s'
-" the default error highlight looks bad with the error sign
-highlight link ALEErrorSign SignifySignDelete
-
-let g:ale_linters = {
-\   'python': ['mypy', 'pyls'],
-\   'vue': ['eslint', 'vls'],
-\   'elm': ['elm_ls'],
-\}
-
-let g:ale_linter_aliases = {'vue': ['vue', 'javascript']}
-
-let g:ale_fixers = {
-\   'javascript': ['eslint'],
-\   'elm': ['elm-format'],
-\}
-
 " Multiple cursors
 let g:multi_cursor_exit_from_visual_mode = 0
 let g:multi_cursor_exit_from_insert_mode = 0
@@ -116,7 +106,23 @@ let g:ale_elm_ls_elm_format_path = "elm-format"
 let g:ale_elm_ls_elm_test_path = "elm-test"
 let g:ale_elm_ls_executable = "elm-language-server"
 let g:elm_setup_keybindings = 0
-let g:elm_format_fail_silently = 1
+let g:elm_format_fail_silently = 0
+
+" ------------
+" Color Config
+" ------------
+colorscheme base16-ocean
+let base16colorspace=256
+set termguicolors
+
+" blend virtual text with background
+autocmd ColorScheme * highlight VirtualError guifg=#754852
+autocmd ColorScheme * highlight VirtualTodo guifg=#786E5B
+
+" the default error highlight looks bad with the error sign
+autocmd ColorScheme * call g:Base16hi('SignifySignWarning', g:base16_gui0A, g:base16_gui01, g:base16_cterm08, g:base16_cterm01, "", "")
+highlight link ALEErrorSign SignifySignDelete
+highlight link ALEWarningSign SignifySignWarning
 
 " -----------
 " Misc config
@@ -239,8 +245,9 @@ map , <Plug>(easymotion-prefix)
 map ,, <Plug>(easymotion-bd-w)
 map ,f <Plug>(easymotion-bd-f)
 
-" Goto definition
-nnoremap gd :ALEGoToDefinition<CR>
+" LSP
+nnoremap gd :call LanguageClient#textDocument_definition()<CR>
+nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 
 " Leave terminal insert mode
 tnoremap <C-n><C-n> <C-\><C-n>
@@ -255,8 +262,9 @@ command! -nargs=* PythonDocTest :!python3 -m doctest %
 autocmd filetype python nnoremap <F1> :call jedi#show_documentation()<cr>
 autocmd filetype python nnoremap <F5> :w <bar> :PythonTestAll<CR>
 
-command GotoDefinition ALEGoToDefinition
-command FindReferences ALEFindReferences
+command GotoDefinition LanguageClient_textDocument_definition()
+command FindReferences LanguageClient_textDocument_references()
+command Lsp :call LanguageClient_contextMenu()
 
 function! CMakeBuildFolder(config)
     let folder = fnamemodify(getcwd(), ':t')
