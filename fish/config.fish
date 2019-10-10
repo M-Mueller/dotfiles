@@ -31,4 +31,8 @@ if test -x (command -v nodejs-yarn)
 	alias yarn "nodejs-yarn"
 end
 
+if test -e ~/.fzf
+    set PATH $PATH ~/.fzf/bin
+end
+
 set fish_prompt_pwd_dir_length 0

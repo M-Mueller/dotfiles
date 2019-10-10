@@ -21,12 +21,15 @@ function git_prompt_info
 		set -l icon ""
 		# try to get the status in under a second
 		set -l git_status (timeout --foreground 1 git status -s)
-		set -l git_dirty (echo $git_status | wc -w)
 		if test $status -ne 0
-			set icon "??"
-		else if test $git_dirty -ne 0
 			set color "yellow"
-			set icon "±"
+			set icon "??"
+		else
+			set -l git_dirty (echo $git_status | wc -w)
+			if test $git_dirty -ne 0
+				set color "yellow"
+				set icon "±"
+			end
 		end
 		echo -n -s (set_color $color)"  $branch $icon"
 		set_color normal
