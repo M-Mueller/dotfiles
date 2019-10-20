@@ -95,6 +95,32 @@ command! -bang -nargs=? -complete=dir Files
 command! -bang -nargs=* Ag
   \ call fzf#vim#ag(<q-args>, fzf#vim#with_preview(), <bang>0)
 
+
+if exists('*nvim_open_win')
+    " show in floating window if available
+    let $FZF_DEFAULT_OPTS='--margin=1,2'
+    let g:fzf_layout = { 'window': 'call FloatingFZF()' }
+
+    function! FloatingFZF()
+        let buf = nvim_create_buf(v:false, v:true)
+        call setbufvar(buf, '&signcolumn', 'no')
+
+        let height = &lines/3
+        let width = float2nr(&columns - (&columns * 2 / 10))
+        let col = float2nr((&columns - width) / 2)
+
+        let opts = {
+                    \ 'relative': 'editor',
+                    \ 'row': 8,
+                    \ 'col': col,
+                    \ 'width': width,
+                    \ 'height': height
+                    \ }
+
+        call nvim_open_win(buf, v:true, opts)
+    endfunction
+endif
+
 " Multiple cursors
 let g:multi_cursor_exit_from_visual_mode = 0
 let g:multi_cursor_exit_from_insert_mode = 0
