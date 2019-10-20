@@ -14,15 +14,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'terryma/vim-multiple-cursors'
 if has('nvim')
-    Plug 'roxma/nvim-yarp'
-    Plug 'ncm2/ncm2'
-    Plug 'ncm2/ncm2-bufword'
-    Plug 'ncm2/ncm2-path'
-
-    Plug 'autozimu/LanguageClient-neovim', {
-        \ 'branch': 'next',
-        \ 'do': 'bash install.sh',
-        \ }
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
 endif
 
 " Python
@@ -41,36 +33,6 @@ call plug#end()
 " -----------
 
 if has('nvim')
-    " ncm2 config
-    autocmd BufEnter * call ncm2#enable_for_buffer()
-    set completeopt=noinsert,menuone,noselect
-    set shortmess+=c
-
-    inoremap <C-c> <ESC>
-    inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
-    " LSP config
-    let g:LanguageClient_serverCommands = {
-    \ 'python': ['pyls'],
-    \ 'elm': ['elm-language-server', '--stdio'],
-    \ }
-
-    let g:LanguageClient_rootMarkers = {
-    \ 'elm': ['elm.json'],
-    \ }
-
-    let g:LanguageClient_loggingFile = '/tmp/nvim-lsp'
-    let g:LanguageClient_settingsPath = '~/.config/nvim/lsp.json'
-
-    let g:LanguageClient_virtualTextPrefix = '> '
-    let g:LanguageClient_diagnosticsDisplay = {
-    \ 1: { "virtualTexthl": "VirtualError", },
-    \ 2: { "virtualTexthl": "VirtualTodo", },
-    \ 3: { "virtualTexthl": "VirtualTodo", },
-    \ 4: { "virtualTexthl": "VirtualTodo", },
-    \ }
-
     " completion is provided by other plugin
     let g:jedi#completions_enabled = 0
     let g:jedi#max_doc_height = 15
@@ -145,10 +107,15 @@ set termguicolors
 autocmd ColorScheme * highlight VirtualError guifg=#754852
 autocmd ColorScheme * highlight VirtualTodo guifg=#786E5B
 
+highlight link CocErrorVirtualText VirtualError
+highlight link CocWarningVirtualText VirtualTodo
+highlight link CocInfoVirtualText VirtualTodo
+highlight link CocHintVirtualText VirtualTodo
+
 " the default error highlight looks bad with the error sign
 autocmd ColorScheme * call g:Base16hi('SignifySignWarning', g:base16_gui0A, g:base16_gui01, g:base16_cterm08, g:base16_cterm01, "", "")
-highlight link ALEErrorSign SignifySignDelete
-highlight link ALEWarningSign SignifySignWarning
+highlight link CocErrorSign SignifySignDelete
+highlight link CocWarningSign SignifySignWarning
 
 " -----------
 " Misc config
@@ -272,8 +239,9 @@ map ,, <Plug>(easymotion-bd-w)
 map ,f <Plug>(easymotion-bd-f)
 
 " LSP
-nnoremap gd :call LanguageClient#textDocument_definition()<CR>
-nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+nnoremap gd :GotoDefinition<CR>
+nnoremap <silent> <F2> :call CocAction('rename')<CR>
+nnoremap <silent> <F1> :call CocAction('doHover')<CR>
 
 " Leave terminal insert mode
 tnoremap <C-n><C-n> <C-\><C-n>
@@ -285,12 +253,10 @@ command! -nargs=* PythonTestAll :!python3 -m pytest
 " Run doctest on the current file
 command! -nargs=* PythonDocTest :!python3 -m doctest %
 
-autocmd filetype python nnoremap <F1> :call jedi#show_documentation()<cr>
 autocmd filetype python nnoremap <F5> :w <bar> :PythonTestAll<CR>
 
-command GotoDefinition LanguageClient_textDocument_definition()
-command FindReferences LanguageClient_textDocument_references()
-command Lsp :call LanguageClient_contextMenu()
+command GotoDefinition :call CocAction('jumpDefinition')
+command FindReferences :call CocAction('jumpReferences')
 
 function! CMakeBuildFolder(config)
     let folder = fnamemodify(getcwd(), ':t')
