@@ -21,13 +21,13 @@ alias vim="nvim"
 alias v="nvim"
 alias ipy="ipython3"
 
-if test -x (command -v gio)
+if type -q gio
 	alias trash="gio trash"
-else if test -x (command -v gvfs-trash)
+else if type -q gvfs-trash
 	alias trash="gvfs-trash"
 end
 
-if test -x (command -v nodejs-yarn)
+if type -q nodejs-yarn
 	alias yarn "nodejs-yarn"
 end
 
