@@ -10,6 +10,9 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'easymotion/vim-easymotion'
 Plug 'FooSoft/vim-argwrap'
+if isdirectory($HOME . '/.fzf')
+    Plug '~/.fzf'
+endif
 Plug 'junegunn/fzf.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'terryma/vim-multiple-cursors'
@@ -36,6 +39,15 @@ if has('nvim')
     " completion is provided by other plugin
     let g:jedi#completions_enabled = 0
     let g:jedi#max_doc_height = 15
+
+    " unassign shortcuts
+    let g:jedi#goto_command = ""
+    let g:jedi#goto_assignments_command = ""
+    let g:jedi#goto_definitions_command = ""
+    let g:jedi#documentation_command = ""
+    let g:jedi#usages_command = ""
+    let g:jedi#completions_command = ""
+    let g:jedi#rename_command = ""
 endif
 
 " NERDTree config
