@@ -8,14 +8,17 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
 Plug 'easymotion/vim-easymotion'
 Plug 'FooSoft/vim-argwrap'
 if isdirectory($HOME . '/.fzf')
     Plug '~/.fzf'
 endif
 Plug 'junegunn/fzf.vim'
+Plug 'junegunn/gv.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'terryma/vim-multiple-cursors'
+Plug 'wellle/targets.vim'
 if has('nvim')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
 endif
@@ -196,6 +199,14 @@ autocmd FileType cpp setlocal
 autocmd BufRead,BufNewFile *.vue setlocal
     \ filetype=vue.html.javascript.css
 
+
+" -------------
+" Abbreviations
+" -------------
+
+abbr esle else
+abbr retrun return
+
 " -----------
 " Key mapping
 " -----------
@@ -252,6 +263,7 @@ map ,f <Plug>(easymotion-bd-f)
 
 " LSP
 nnoremap gd :GotoDefinition<CR>
+nnoremap gh :GotoHeader<CR>
 nnoremap <silent> <F2> :call CocAction('rename')<CR>
 nnoremap <silent> <F1> :call CocAction('doHover')<CR>
 
@@ -269,6 +281,8 @@ autocmd filetype python nnoremap <F5> :w <bar> :PythonTestAll<CR>
 
 command GotoDefinition :call CocAction('jumpDefinition')
 command FindReferences :call CocAction('jumpReferences')
+command GotoHeader execute 'edit' CocRequest('clangd', 'textDocument/switchSourceHeader', {'uri': 'file://'.expand("%:p")})
+command EditSettings :e ~/.config/nvim/init.vim
 
 function! CMakeBuildFolder(config)
     let folder = fnamemodify(getcwd(), ':t')

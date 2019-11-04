@@ -1,8 +1,17 @@
 {
-    "diagnostic.errorSign": "⚠",
+    "diagnostic.errorSign": "✖",
+    "diagnostic.warningSign": "⚠",
+    "diagnostic.infoSign": "🛈",
+    "diagnostic.hintSign": "🛈",
     "diagnostic.virtualText": true,
     "diagnostic.virtualTextPrefix": "> ",
     "languageserver": {
+        "clangd": {
+            "command": "clangd-8",
+            "args": [],
+            "rootPatterns": ["compile_commands.json", ".vim/", ".git/"],
+            "filetypes": ["c", "cpp", "objc", "objcpp"]
+        },
         "elmLS": {
             "command": "elm-language-server",
             "filetypes": ["elm"],
