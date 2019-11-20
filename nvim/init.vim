@@ -19,6 +19,9 @@ Plug 'junegunn/gv.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'wellle/targets.vim'
+Plug 'majutsushi/tagbar'
+Plug 'RRethy/vim-illuminate'
+Plug 'psliwka/vim-smoothie'
 if has('nvim')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
 endif
@@ -241,9 +244,13 @@ nnoremap <leader>x :bp<bar>bd#<CR>
 
 " Select next completion with tab
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " NERDTree shortcut
 nnoremap <leader>n :NERDTreeToggle<CR>
+
+" tagbar shortcut
+nnoremap <leader>t :TagbarOpenAutoClose<CR>
 
 " Open previous buffer
 nnoremap <leader><Tab> :b#<CR>
