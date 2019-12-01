@@ -1,6 +1,6 @@
 " load vim-plug plugins
 call plug#begin()
-Plug 'chriskempson/base16-vim'
+Plug 'arcticicestudio/nord-vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
@@ -117,9 +117,10 @@ let g:elm_format_fail_silently = 0
 " ------------
 " Color Config
 " ------------
-colorscheme base16-ocean
-let base16colorspace=256
+colorscheme nord
 set termguicolors
+Plug 'arcticicestudio/nord-vim'
+let g:nord_cursor_line_number_background = 1
 
 " blend virtual text with background
 autocmd ColorScheme * highlight VirtualError guifg=#754852
@@ -131,7 +132,6 @@ highlight link CocInfoVirtualText VirtualTodo
 highlight link CocHintVirtualText VirtualTodo
 
 " the default error highlight looks bad with the error sign
-autocmd ColorScheme * call g:Base16hi('SignifySignWarning', g:base16_gui0A, g:base16_gui01, g:base16_cterm08, g:base16_cterm01, "", "")
 highlight link CocErrorSign SignifySignDelete
 highlight link CocWarningSign SignifySignWarning
 
