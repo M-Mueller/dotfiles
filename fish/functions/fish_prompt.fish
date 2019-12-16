@@ -43,12 +43,19 @@ function fish_prompt --description 'Write out the prompt'
 	echo -n -s (git_prompt_info)
 	echo ''
 
+	# show red gear if there are background jobs
+	set -l num_jobs (jobs -l | wc -l)
+	if test $num_jobs -gt 0
+		echo -n -s (set_color red)'⚙ '
+	end
+
 	# color prompt start depending on last return value
 	if test $status -eq 0
 		set_color cyan
 	else
 		set_color red
 	end
+
 	echo -n '❯ '
 	set_color normal
 	echo ''
@@ -65,11 +72,6 @@ end
 
 function fish_right_prompt
 	echo -n -s (venv_prompt_info)
-
-	set -l num_jobs (jobs -l | wc -l)
-	if test $num_jobs -gt 0
-		echo -n -s (set_color red)'⚙'
-	end
 
 	echo -n -s ' '
 	set_color normal
