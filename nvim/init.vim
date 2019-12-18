@@ -1,7 +1,7 @@
 " load vim-plug plugins
 call plug#begin()
 Plug 'arcticicestudio/nord-vim'
-Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline', {'branch': 'v0.10'}
 Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -9,6 +9,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-unimpaired'
 Plug 'easymotion/vim-easymotion'
 Plug 'FooSoft/vim-argwrap'
 if isdirectory($HOME . '/.fzf')
@@ -17,7 +18,7 @@ endif
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/gv.vim'
 Plug 'sheerun/vim-polyglot'
-Plug 'terryma/vim-multiple-cursors'
+Plug 'mg979/vim-visual-multi'
 Plug 'wellle/targets.vim'
 Plug 'majutsushi/tagbar'
 Plug 'RRethy/vim-illuminate'
@@ -101,10 +102,6 @@ if exists('*nvim_open_win')
     endfunction
 endif
 
-" Multiple cursors
-let g:multi_cursor_exit_from_visual_mode = 0
-let g:multi_cursor_exit_from_insert_mode = 0
-
 " elm
 let g:ale_elm_ls_use_global = 1
 let g:ale_elm_ls_elm_path = "elm"
@@ -140,8 +137,9 @@ highlight link CocWarningSign SignifySignWarning
 " -----------
 set encoding=utf-8
 
-"show line numbers
-set nu
+"show relative line numbers
+set number
+set relativenumber
 
 " Allow hiding modified buffers
 set hidden
@@ -223,9 +221,10 @@ nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
 nnoremap <C-H> <C-W>h
 
-" Save with C-S
+" Save file
 nnoremap <C-S> :w<CR>
 inoremap <C-S> <ESC>:w<CR>a
+nnoremap <leader>w :w<CR>
 
 " Paste from clipboard in insert mode
 inoremap <C-V> <ESC>"+pa
@@ -252,11 +251,9 @@ nnoremap <leader>n :NERDTreeToggle<CR>
 " tagbar shortcut
 nnoremap <leader>t :TagbarOpenAutoClose<CR>
 
-" Open previous buffer
-nnoremap <leader><Tab> :b#<CR>
-
 " Fuzzy finder
 nnoremap <C-p> :Files<CR>
+nnoremap <leader>p :Files<CR>
 nnoremap <leader><space> :Buffers<CR>
 
 " Toggle comment (actually maps <C-/>)
@@ -284,12 +281,10 @@ command! -nargs=* PythonTestAll :!python3 -m pytest
 " Run doctest on the current file
 command! -nargs=* PythonDocTest :!python3 -m doctest %
 
-autocmd filetype python nnoremap <F5> :w <bar> :PythonTestAll<CR>
-
-command GotoDefinition :call CocAction('jumpDefinition')
-command FindReferences :call CocAction('jumpReferences')
-command GotoHeader execute 'edit' CocRequest('clangd', 'textDocument/switchSourceHeader', {'uri': 'file://'.expand("%:p")})
-command EditSettings :e ~/.config/nvim/init.vim
+command! GotoDefinition :call CocAction('jumpDefinition')
+command! FindReferences :call CocAction('jumpReferences')
+command! GotoHeader execute 'edit' CocRequest('clangd', 'textDocument/switchSourceHeader', {'uri': 'file://'.expand("%:p")})
+command! EditSettings :e ~/.config/nvim/init.vim
 
 function! CMakeBuildFolder(config)
     let folder = fnamemodify(getcwd(), ':t')
