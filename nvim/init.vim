@@ -188,7 +188,7 @@ syntax on
 " Filetype config
 " ---------------
 
-autocmd FileType javascript setlocal
+autocmd FileType javascript,javascriptreact setlocal
     \ tabstop=2
     \ softtabstop=2
     \ shiftwidth=2
@@ -199,6 +199,9 @@ autocmd FileType cpp setlocal
 " Enable completion and linting for vue files
 autocmd BufRead,BufNewFile *.vue setlocal
     \ filetype=vue.html.javascript.css
+
+autocmd BufRead,BufNewFile *.js setlocal
+    \ filetype=javascript.jsx
 
 
 " -------------
@@ -284,6 +287,7 @@ command! -nargs=* PythonDocTest :!python3 -m doctest %
 command! GotoDefinition :call CocAction('jumpDefinition')
 command! FindReferences :call CocAction('jumpReferences')
 command! GotoHeader execute 'edit' CocRequest('clangd', 'textDocument/switchSourceHeader', {'uri': 'file://'.expand("%:p")})
+command! -nargs=0 Format :call CocAction('format')
 command! EditSettings :e ~/.config/nvim/init.vim
 
 function! CMakeBuildFolder(config)
