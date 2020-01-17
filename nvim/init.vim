@@ -86,7 +86,7 @@ if exists('*nvim_open_win')
         let buf = nvim_create_buf(v:false, v:true)
         call setbufvar(buf, '&signcolumn', 'no')
 
-        let height = &lines/3
+        let height = &lines/2
         let width = float2nr(&columns - (&columns * 2 / 10))
         let col = float2nr((&columns - width) / 2)
 
@@ -288,7 +288,7 @@ command! GotoDefinition :call CocAction('jumpDefinition')
 command! FindReferences :call CocAction('jumpReferences')
 command! GotoHeader execute 'edit' CocRequest('clangd', 'textDocument/switchSourceHeader', {'uri': 'file://'.expand("%:p")})
 command! -nargs=0 Format :call CocAction('format')
-command! EditSettings :e ~/.config/nvim/init.vim
+command! EditConfig :e ~/.config/nvim/init.vim
 
 function! CMakeBuildFolder(config)
     let folder = fnamemodify(getcwd(), ':t')
