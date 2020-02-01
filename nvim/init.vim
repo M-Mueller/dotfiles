@@ -23,6 +23,7 @@ Plug 'wellle/targets.vim'
 Plug 'majutsushi/tagbar'
 Plug 'RRethy/vim-illuminate'
 Plug 'psliwka/vim-smoothie'
+Plug 'dyng/ctrlsf.vim'
 if has('nvim')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
 endif
