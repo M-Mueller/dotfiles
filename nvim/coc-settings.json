@@ -6,11 +6,15 @@
     "diagnostic.virtualText": true,
     "diagnostic.virtualTextPrefix": "> ",
     "languageserver": {
-        "clangd": {
-            "command": "clangd-8",
-            "args": [],
-            "rootPatterns": ["compile_commands.json", ".vim/", ".git/"],
-            "filetypes": ["c", "cpp", "objc", "objcpp"]
+        "ccls": {
+            "command": "ccls",
+            "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
+            "rootPatterns": [".ccls-root", "compile_commands.json"],
+            "initializationOptions": {
+                "cache": {
+                    "directory": ".ccls-cache"
+                }
+            }
         },
         "elmLS": {
             "command": "elm-language-server",
