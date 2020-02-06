@@ -46,7 +46,6 @@
                     },
                     "commandPath": "",
                     "configurationSources": [
-                        "pycodestyle"
                     ],
                     "plugins": {
                         "jedi_completion": {
@@ -73,7 +72,7 @@
                             "enabled": true
                         },
                         "pycodestyle": {
-                            "enabled": true
+                            "enabled": false
                         },
                         "pydocstyle": {
                             "enabled": false,
@@ -81,6 +80,9 @@
                             "matchDir": "[^\\.].*"
                         },
                         "pyflakes": {
+                            "enabled": true
+                        },
+                        "pyls_mypy": {
                             "enabled": true
                         },
                         "rope_completion": {
