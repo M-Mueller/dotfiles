@@ -1,6 +1,5 @@
 " load vim-plug plugins
 call plug#begin()
-Plug 'arcticicestudio/nord-vim'
 Plug 'vim-airline/vim-airline', {'branch': 'v0.10'}
 Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
@@ -21,12 +20,15 @@ Plug 'sheerun/vim-polyglot'
 Plug 'mg979/vim-visual-multi'
 Plug 'PeterRincker/vim-argumentative'
 Plug 'majutsushi/tagbar'
-Plug 'RRethy/vim-illuminate'
-Plug 'psliwka/vim-smoothie'
 Plug 'dyng/ctrlsf.vim'
 if has('nvim')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
 endif
+
+" eye candy
+Plug 'arcticicestudio/nord-vim'
+Plug 'RRethy/vim-illuminate'
+Plug 'psliwka/vim-smoothie'
 
 " Python
 Plug 'vim-scripts/indentpython.vim'
@@ -282,6 +284,13 @@ vmap <C-_> gc
 map , <Plug>(easymotion-prefix)
 map ,, <Plug>(easymotion-bd-w)
 map ,f <Plug>(easymotion-bd-f)
+
+" Surround visual selection
+vmap ( Sa(
+vmap { Sa{
+vmap [ Sa[
+vmap " Sa"
+vmap ' Sa'
 
 " LSP
 nnoremap gd :GotoDefinition<CR>
