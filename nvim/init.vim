@@ -276,6 +276,27 @@ nnoremap <C-p> :Files<CR>
 nnoremap <leader>p :Files<CR>
 nnoremap <leader><space> :Buffers<CR>
 
+" Switch FZF to Files mode
+function! SwitchFZFMode()
+    " copy everything until the cursor position into register z
+    normal v0"zy
+    if matchstr(@z, 'Buf>') != ""
+        " copy text after 'Buf>' and trim whitespace
+        let query = substitute(@z, '\s*Buf>\s*\(.\{-}\)\s*$', '\1', 'g')
+        " close current fzf window
+        q
+        " need to wait before launching :Files
+        sleep 10m
+        Files
+        " enter the previously copied text as search
+        call feedkeys(l:query, 't')
+    else
+        " ignore in non buffer modes and go back to insert
+        normal A
+    endif
+endfunction
+autocmd FileType fzf tnoremap <silent> <space><space> <C-\><C-N>:call SwitchFZFMode()<CR>
+
 " Toggle comment (actually maps <C-/>)
 nmap <C-_> gcc
 vmap <C-_> gc
