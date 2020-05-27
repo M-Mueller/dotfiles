@@ -21,6 +21,8 @@ Plug 'mg979/vim-visual-multi'
 Plug 'PeterRincker/vim-argumentative'
 Plug 'majutsushi/tagbar'
 Plug 'dyng/ctrlsf.vim'
+Plug 'stefandtw/quickfix-reflector.vim'
+Plug 'mbbill/undotree'
 if has('nvim')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
 endif
@@ -78,7 +80,6 @@ command! -bang -nargs=? -complete=dir Files
   \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 command! -bang -nargs=* Ag
   \ call fzf#vim#ag(<q-args>, fzf#vim#with_preview(), <bang>0)
-
 
 if exists('*nvim_open_win')
     " show in floating window if available
@@ -175,7 +176,8 @@ set autoindent
 set foldmethod=indent
 set foldlevel=99
 
-" preview :substitude command
+" Keep persistent undotree
+set undofile
 
 if has('nvim')
     " preview :substitude command
@@ -192,6 +194,12 @@ set cursorline
 
 let python_highlight_all=1
 syntax on
+
+" use rg as grep replacement if available
+if executable("rg")
+    set grepprg=rg\ --vimgrep\ --no-heading
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
+endif
 
 " ---------------
 " Filetype config
