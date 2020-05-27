@@ -7,9 +7,8 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-abolish'
-Plug 'machakann/vim-sandwich'
+Plug 'tpope/vim-surround'
 Plug 'easymotion/vim-easymotion'
 Plug 'FooSoft/vim-argwrap'
 if isdirectory($HOME . '/.fzf')
@@ -106,35 +105,22 @@ if exists('*nvim_open_win')
     endfunction
 endif
 
-" sandwich
-" remap keybindings from s to S
-let g:sandwich_no_default_key_mappings = 1
-let g:operator_sandwich_no_default_key_mappings = 1
-let g:textobj_sandwich_no_default_key_mappings = 1
-silent! nmap <unique> Sa <Plug>(operator-sandwich-add)
-silent! xmap <unique> Sa <Plug>(operator-sandwich-add)
-silent! omap <unique> Sa <Plug>(operator-sandwich-g@)
-
-silent! nmap <unique><silent> Sd <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
-silent! nmap <unique><silent> Sr <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-query-a)
-silent! nmap <unique><silent> Sdb <Plug>(operator-sandwich-delete)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
-silent! nmap <unique><silent> Srb <Plug>(operator-sandwich-replace)<Plug>(operator-sandwich-release-count)<Plug>(textobj-sandwich-auto-a)
-
 " elm
-let g:ale_elm_ls_use_global = 1
-let g:ale_elm_ls_elm_path = "elm"
-let g:ale_elm_ls_elm_format_path = "elm-format"
-let g:ale_elm_ls_elm_test_path = "elm-test"
-let g:ale_elm_ls_executable = "elm-language-server"
 let g:elm_setup_keybindings = 0
 let g:elm_format_fail_silently = 0
+let g:tagbar_type_elm = {
+          \   'ctagstype':'elm'
+          \ , 'kinds':['h:header', 'i:import', 't:type', 'f:function', 'e:exposing']
+          \ , 'sro':'&&&'
+          \ , 'kind2scope':{ 'h':'header', 'i':'import'}
+          \ , 'sort':0
+          \ }
 
 " ------------
 " Color Config
 " ------------
 colorscheme nord
 set termguicolors
-Plug 'arcticicestudio/nord-vim'
 let g:nord_cursor_line_number_background = 1
 
 " blend virtual text with background
@@ -190,8 +176,13 @@ set foldmethod=indent
 set foldlevel=99
 
 " preview :substitude command
+
 if has('nvim')
+    " preview :substitude command
     set inccommand=split
+
+    " start terminal in insert mode
+    autocmd TermOpen * startinsert
 endif
 
 " show whitespace characters
@@ -286,13 +277,6 @@ map , <Plug>(easymotion-prefix)
 map ,, <Plug>(easymotion-bd-w)
 map ,f <Plug>(easymotion-bd-f)
 
-" Surround visual selection
-vmap ( Sa(
-vmap { Sa{
-vmap [ Sa[
-vmap " Sa"
-vmap ' Sa'
-
 " LSP
 nnoremap gd :GotoDefinition<CR>
 nnoremap gh :GotoHeader<CR>
@@ -314,24 +298,3 @@ command! FindReferences :call CocAction('jumpReferences')
 command! GotoHeader execute 'edit' CocRequest('clangd', 'textDocument/switchSourceHeader', {'uri': 'file://'.expand("%:p")})
 command! -nargs=0 Format :call CocAction('format')
 command! EditConfig :e ~/.config/nvim/init.vim
-
-function! CMakeBuildFolder(config)
-    let folder = fnamemodify(getcwd(), ':t')
-    return "../build-" . folder . "-" . a:config
-endfunction
-
-function! CMakeSelectConfig(config)
-    let folder = CMakeBuildFolder(a:config)
-    let &makeprg = "cmake --build " . folder
-endfunction
-
-function! CMakeInitConfig(config)
-    let build_folder = CMakeBuildFolder(a:config)
-    let src_folder = fnamemodify(getcwd(), ':t')
-    silent execute "!mkdir -p " . build_folder
-    execute ":edit term://cd " . build_folder . " && ccmake ../" . src_folder . " | :startinsert"
-    call CMakeSelectConfig(a:config)
-endfunction
-
-command! -nargs=1 CMakeSelect :call CMakeSelectConfig(<f-args>)
-command! -nargs=1 CMakeInit :call CMakeInitConfig(<f-args>)

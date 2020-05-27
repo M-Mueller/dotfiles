@@ -5,6 +5,7 @@
     "diagnostic.hintSign": "🛈",
     "diagnostic.virtualText": true,
     "diagnostic.virtualTextPrefix": "> ",
+    "coc.preferences.formatOnSaveFiletypes": ["elm"],
     "languageserver": {
         "ccls": {
             "command": "ccls",
