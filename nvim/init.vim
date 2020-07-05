@@ -124,6 +124,10 @@ colorscheme nord
 set termguicolors
 let g:nord_cursor_line_number_background = 1
 
+" use nord7_gui to emphasize types (g:terminal_color_14 is s:nord7_gui)
+exec "autocmd ColorScheme * highlight Type guifg=" . g:terminal_color_14
+exec "autocmd ColorScheme * highlight Typedef guifg=" . g:terminal_color_14
+
 " blend virtual text with background
 autocmd ColorScheme * highlight VirtualError guifg=#754852
 autocmd ColorScheme * highlight VirtualTodo guifg=#786E5B
@@ -132,10 +136,6 @@ highlight link CocErrorVirtualText VirtualError
 highlight link CocWarningVirtualText VirtualTodo
 highlight link CocInfoVirtualText VirtualTodo
 highlight link CocHintVirtualText VirtualTodo
-
-" the default error highlight looks bad with the error sign
-highlight link CocErrorSign SignifySignDelete
-highlight link CocWarningSign SignifySignWarning
 
 " -----------
 " Misc config
@@ -220,7 +220,12 @@ autocmd BufRead,BufNewFile *.vue setlocal
 autocmd BufRead,BufNewFile *.js setlocal
     \ filetype=javascript.jsx
 
-
+if executable("jq")
+    " Reformat elm make errors to a single line
+    autocmd FileType elm setlocal
+        \ makeprg=vim_elm_make " defined in fish config because vimscript escaping is retarded
+        \ errorformat=%f:%l:%c\ (%o)\ %m
+endif
 " -------------
 " Abbreviations
 " -------------
