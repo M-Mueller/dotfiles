@@ -8,12 +8,6 @@ set --export PAGER "less"
 
 set --export VIRTUAL_ENV_DISABLE_PROMPT 1
 
-if test -x (command -v fd)
-	# Use fd for fzf if available
-	set --export FZF_DEFAULT_COMMAND 'fd --type file'
-	set --export FZF_CTRL_T_COMMAND "$FZF_DEFAULT_COMMAND"
-end
-
 alias ls="ls --color=auto"
 alias lsl="ls -l"
 alias grep="grep --color=auto"
@@ -29,10 +23,23 @@ end
 
 if type -q nodejs-yarn
 	alias yarn "nodejs-yarn"
+else if type -q yarnpkg
+	alias yarn "yarnpkg"
+end
+
+if type -q fdfind
+    alias fd "fdfind"
 end
 
 if test -e ~/.fzf
     set PATH $PATH ~/.fzf/bin
 end
+
+if type -q fd
+	# Use fd for fzf if available
+	set --export FZF_DEFAULT_COMMAND 'fd --type file'
+	set --export FZF_CTRL_T_COMMAND "$FZF_DEFAULT_COMMAND"
+end
+
 
 set fish_prompt_pwd_dir_length 0
