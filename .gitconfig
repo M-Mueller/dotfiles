@@ -11,6 +11,9 @@
 	ci = commit
 	co = checkout
 	st = status
+	cof = !git checkout $(git branch -a | fzf | sed 's%remotes/[^/]*/%%')
+	glog = log --graph --oneline --decorate
+	slog = log --oneline --decorate
 [push]
 	default = simple
 [credential]
