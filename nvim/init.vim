@@ -1,7 +1,6 @@
 " load vim-plug plugins
 call plug#begin()
-Plug 'vim-airline/vim-airline', {'branch': 'v0.10'}
-Plug 'vim-airline/vim-airline-themes'
+Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tpope/vim-fugitive'
@@ -19,10 +18,10 @@ Plug 'junegunn/gv.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'mg979/vim-visual-multi'
 Plug 'PeterRincker/vim-argumentative'
-Plug 'majutsushi/tagbar'
-Plug 'dyng/ctrlsf.vim'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'mbbill/undotree'
+Plug 'majutsushi/tagbar'
+Plug 'ludovicchabant/vim-gutentags'
 if has('nvim')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
 endif
@@ -65,14 +64,11 @@ endif
 " NERDTree config
 let NERDTreeIgnore=['\.pyc$', '\~$', '__pycache__']
 
-" airline config
-" mode is already displayed by airline
+" lightline config
 set noshowmode
-let g:airline_powerline_fonts = 1
-" show bufferline
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_alt_sep = '|'
-let g:airline#extensions#tabline#left_sep = ' '
+let g:lightline = {
+      \ 'colorscheme': 'nord',
+      \ }
 
 " fzf
 " Show preview in Files and Ag
@@ -116,6 +112,12 @@ let g:tagbar_type_elm = {
           \ , 'kind2scope':{ 'h':'header', 'i':'import'}
           \ , 'sort':0
           \ }
+
+" gutentags
+if executable('fd')
+    " Consider gitignore when generating tags
+    let g:gutentags_file_list_command = 'fd'
+endif
 
 " ------------
 " Color Config
@@ -226,6 +228,7 @@ if executable("jq")
         \ makeprg=vim_elm_make " defined in fish config because vimscript escaping is retarded
         \ errorformat=%f:%l:%c\ (%o)\ %m
 endif
+command! Elmtest :terminal elm-test
 " -------------
 " Abbreviations
 " -------------

@@ -19,6 +19,9 @@
         },
         "elmLS": {
             "command": "elm-language-server",
+            "args": [
+                "--stdio"
+            ],
             "filetypes": ["elm"],
             "rootPatterns": ["elm.json"],
             "initializationOptions": {
