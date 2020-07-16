@@ -4,7 +4,7 @@
 	email = M-Mueller@users.noreply.github.com
 [core]
 	editor = nvim
-	excludesfile = /home/markus/.gitignore
+	excludesfile = ~/.gitignore
 [color]
 	ui = auto
 [alias]
@@ -31,3 +31,8 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+[cola]
+	spellcheck = true
+	tabwidth = 4
+	expandtab = false
+	theme = default
