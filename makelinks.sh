@@ -9,4 +9,6 @@ ln -s $DOTFILES/.tmux.conf
 ln -s $DOTFILES/nvim .config
 ln -s $DOTFILES/fish .config
 
+echo 'install rg, jq, fd'
+
 cd $DOTFILES
