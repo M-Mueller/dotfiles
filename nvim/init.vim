@@ -118,6 +118,8 @@ if executable('fd')
     " Consider gitignore when generating tags
     let g:gutentags_file_list_command = 'fd'
 endif
+let g:gutentags_project_root = ['CMakeLists.txt', 'package.json', 'elm.json']
+let g:gutentags_add_default_project_roots = v:false
 
 " ------------
 " Color Config
