@@ -153,6 +153,7 @@ highlight link CocHintVirtualText VirtualTodo
 " Misc config
 " -----------
 set encoding=utf-8
+set fsync
 
 "show relative line numbers
 set number
