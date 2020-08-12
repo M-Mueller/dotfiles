@@ -68,7 +68,15 @@ let NERDTreeIgnore=['\.pyc$', '\~$', '__pycache__']
 set noshowmode
 let g:lightline = {
       \ 'colorscheme': 'nord',
+      \ 'component_function': {
+      \   'filename': 'FilenameForLightline'
       \ }
+      \ }
+
+" Show full path of filename
+function! FilenameForLightline()
+    return expand('%')
+endfunction
 
 " fzf
 " Show preview in Files and Ag
