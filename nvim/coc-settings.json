@@ -7,15 +7,10 @@
     "diagnostic.virtualTextPrefix": "> ",
     "coc.preferences.formatOnSaveFiletypes": ["elm"],
     "languageserver": {
-        "ccls": {
-            "command": "ccls",
+        "clangd": {
+            "command": "clangd",
             "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
-            "rootPatterns": [".ccls-root", "compile_commands.json"],
-            "initializationOptions": {
-                "cache": {
-                    "directory": ".ccls-cache"
-                }
-            }
+            "rootPatterns": ["compile_commands.json"]
         },
         "elmLS": {
             "command": "elm-language-server",
