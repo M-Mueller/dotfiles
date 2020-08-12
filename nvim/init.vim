@@ -233,6 +233,10 @@ autocmd BufRead,BufNewFile *.vue setlocal
 autocmd BufRead,BufNewFile *.js setlocal
     \ filetype=javascript.jsx
 
+" Hot Module Replacement doesn't work reliable without this option
+autocmd FileType elm,javascript,html,css setlocal
+    \ backupcopy=yes
+
 if executable("jq")
     " Reformat elm make errors to a single line
     autocmd FileType elm setlocal
@@ -273,6 +277,9 @@ vnoremap <C-C> "+y
 " Navigate by soft line wraps
 nnoremap <silent> j gj
 nnoremap <silent> k gk
+
+" Copy to end of line
+map <silent> Y y$
 
 " switch to previous buffer
 nnoremap <leader><Tab> :b#<CR>
