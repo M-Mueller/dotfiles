@@ -4,6 +4,7 @@ DOTFILES=`pwd`
 
 cd ~
 ln -s $DOTFILES/.gitconfig
+ln -s $DOTFILES/gitignore .gitignore
 ln -s $DOTFILES/.ctags
 ln -s $DOTFILES/.tmux.conf
 ln -s $DOTFILES/nvim .config
