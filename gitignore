@@ -1,4 +1,7 @@
-__pycache__/
 .ccls-cache/
 .clangd/
+__pycache__/
+.mypy_cache
+.pytest_cache
+CMakeLists.txt.user
 tags
