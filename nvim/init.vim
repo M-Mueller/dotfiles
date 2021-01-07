@@ -242,8 +242,10 @@ if executable("jq")
     autocmd FileType elm setlocal
         \ makeprg=vim_elm_make " defined in fish config because vimscript escaping is retarded
         \ errorformat=%f:%l:%c\ (%o)\ %m
+    autocmd FileType elm let
+        \ b:testprg=":term elm-test"
 endif
-command! Elmtest :terminal elm-test
+
 " -------------
 " Abbreviations
 " -------------
@@ -340,6 +342,10 @@ nnoremap <silent> <F1> :call CocAction('doHover')<CR>
 
 " Leave terminal insert mode
 tnoremap <C-n><C-n> <C-\><C-n>
+
+" building and testing
+nnoremap <F7> :make<CR>
+nnoremap <F8> :execute b:testprg<CR>
 
 " Run the current file through pythons unittest
 command! -nargs=* PythonTest :!python3 -m pytest <f-args> %
