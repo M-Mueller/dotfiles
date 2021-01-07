@@ -237,6 +237,12 @@ autocmd BufRead,BufNewFile *.js setlocal
 autocmd FileType elm,javascript,html,css setlocal
     \ backupcopy=yes
 
+autocmd FileType fsharp setlocal
+    \ makeprg=dotnet\ build
+    \ errorformat=%f(%l\\,%c):\ error\ FS%n:\ %m
+autocmd FileType fsharp let
+    \ b:testprg="!dotnet test"
+
 if executable("jq")
     " Reformat elm make errors to a single line
     autocmd FileType elm setlocal
