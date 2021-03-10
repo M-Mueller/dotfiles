@@ -21,7 +21,6 @@ Plug 'PeterRincker/vim-argumentative'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'mbbill/undotree'
 Plug 'majutsushi/tagbar'
-Plug 'ludovicchabant/vim-gutentags'
 if has('nvim')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
 endif
@@ -120,14 +119,6 @@ let g:tagbar_type_elm = {
           \ , 'kind2scope':{ 'h':'header', 'i':'import'}
           \ , 'sort':0
           \ }
-
-" gutentags
-if executable('fd')
-    " Consider gitignore when generating tags
-    let g:gutentags_file_list_command = 'fd'
-endif
-let g:gutentags_project_root = ['CMakeLists.txt', 'package.json', 'elm.json']
-let g:gutentags_add_default_project_roots = v:false
 
 " ------------
 " Color Config
