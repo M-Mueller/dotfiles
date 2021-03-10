@@ -84,6 +84,24 @@ command! -bang -nargs=? -complete=dir Files
 command! -bang -nargs=* Ag
   \ call fzf#vim#ag(<q-args>, fzf#vim#with_preview(), <bang>0)
 
+" List buffers to delete
+function! s:list_buffers()
+  redir => list
+  silent ls
+  redir END
+  return split(list, "\n")
+endfunction
+
+function! s:delete_buffers(lines)
+  execute 'bdelete' join(map(a:lines, {_, line -> split(line)[0]}))
+endfunction
+
+command! BD call fzf#run(fzf#wrap({
+  \ 'source': s:list_buffers(),
+  \ 'sink*': { lines -> s:delete_buffers(lines) },
+  \ 'options': '--multi --bind ctrl-a:select-all+accept'
+\ }))
+
 if exists('*nvim_open_win')
     " show in floating window if available
     let $FZF_DEFAULT_OPTS='--margin=1,2'
