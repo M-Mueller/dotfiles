@@ -20,7 +20,6 @@ Plug 'mg979/vim-visual-multi'
 Plug 'PeterRincker/vim-argumentative'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'mbbill/undotree'
-Plug 'majutsushi/tagbar'
 if has('nvim')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
 endif
@@ -311,8 +310,8 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 " NERDTree shortcut
 nnoremap <leader>n :NERDTreeToggle<CR>
 
-" tagbar shortcut
-nnoremap <leader>t :TagbarOpenAutoClose<CR>
+" tags shortcut
+nnoremap <leader>t :Tags<CR>
 
 " Fuzzy finder
 nnoremap <C-p> :Files<CR>
@@ -354,6 +353,10 @@ nnoremap gd :GotoDefinition<CR>
 nnoremap gh :GotoHeader<CR>
 nnoremap <silent> <F2> :call CocAction('rename')<CR>
 nnoremap <silent> <F1> :call CocAction('doHover')<CR>
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+nmap <silent> <space>E <Plug>(coc-diagnostic-prev)
+nmap <silent> <space>e <Plug>(coc-diagnostic-next)
 
 " Leave terminal insert mode
 tnoremap <C-n><C-n> <C-\><C-n>
