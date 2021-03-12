@@ -33,9 +33,6 @@ Plug 'psliwka/vim-smoothie'
 Plug 'vim-scripts/indentpython.vim'
 Plug 'davidhalter/jedi-vim'
 
-" Rust
-Plug 'timonv/vim-cargo'
-
 " Web
 Plug 'othree/csscomplete.vim'
 call plug#end()
@@ -129,13 +126,6 @@ endif
 " elm
 let g:elm_setup_keybindings = 0
 let g:elm_format_fail_silently = 0
-let g:tagbar_type_elm = {
-          \   'ctagstype':'elm'
-          \ , 'kinds':['h:header', 'i:import', 't:type', 'f:function', 'e:exposing']
-          \ , 'sro':'&&&'
-          \ , 'kind2scope':{ 'h':'header', 'i':'import'}
-          \ , 'sort':0
-          \ }
 
 " ------------
 " Color Config
@@ -254,11 +244,15 @@ autocmd FileType fsharp let
 if executable("jq")
     " Reformat elm make errors to a single line
     autocmd FileType elm setlocal
-        \ makeprg=vim_elm_make " defined in fish config because vimscript escaping is retarded
-        \ errorformat=%f:%l:%c\ (%o)\ %m
+        \ makeprg=elm\ make\ --output=/dev/null\ src/Main.elm
     autocmd FileType elm let
         \ b:testprg=":term elm-test"
 endif
+
+autocmd FileType rust setlocal
+    \ makeprg=cargo\ build
+autocmd FileType rust let
+    \ b:testprg="!cargo test"
 
 " -------------
 " Abbreviations
