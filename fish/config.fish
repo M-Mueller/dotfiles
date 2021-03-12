@@ -1,6 +1,6 @@
 set fish_greeting ""
 
-set --export PATH $PATH ~/.local/bin
+set --export PATH $PATH ~/.local/bin ~/.dotnet/tools
 set --export BROWSER "firefox"
 set --export EDITOR "vim"
 set --export VISUAL "vim"
