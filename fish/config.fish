@@ -37,7 +37,7 @@ end
 
 if type -q fd
 	# Use fd for fzf if available
-	set --export FZF_DEFAULT_COMMAND 'fd --type file'
+	set --export FZF_DEFAULT_COMMAND 'fd --type file --follow'
 	set --export FZF_CTRL_T_COMMAND "$FZF_DEFAULT_COMMAND"
 end
 
