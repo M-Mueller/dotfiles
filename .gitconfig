@@ -16,8 +16,6 @@
 	slog = log --oneline --decorate
 [push]
 	default = simple
-[credential]
-	helper = libsecret
 [diff]
 	tool = kdiff3
 [difftool "kdiff3"]
@@ -36,3 +34,5 @@
 	tabwidth = 4
 	expandtab = false
 	theme = default
+[init]
+	defaultBranch = main

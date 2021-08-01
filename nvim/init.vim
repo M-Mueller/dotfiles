@@ -10,9 +10,7 @@ Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-surround'
 Plug 'easymotion/vim-easymotion'
 Plug 'FooSoft/vim-argwrap'
-if isdirectory($HOME . '/.fzf')
-    Plug '~/.fzf'
-endif
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/gv.vim'
 Plug 'sheerun/vim-polyglot'
@@ -20,6 +18,7 @@ Plug 'mg979/vim-visual-multi'
 Plug 'PeterRincker/vim-argumentative'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'mbbill/undotree'
+Plug 'preservim/tagbar'
 if has('nvim')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
 endif
@@ -208,7 +207,7 @@ syntax on
 
 " use rg as grep replacement if available
 if executable("rg")
-    set grepprg=rg\ --vimgrep\ --no-heading
+    set grepprg=rg\ --vimgrep\ --no-heading\ --follow\ --smart-case
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
 
@@ -238,6 +237,7 @@ autocmd FileType elm,javascript,html,css setlocal
 autocmd FileType fsharp setlocal
     \ makeprg=dotnet\ build
     \ errorformat=%f(%l\\,%c):\ error\ FS%n:\ %m
+    \ commentstring=//\ %s
 autocmd FileType fsharp let
     \ b:testprg="!dotnet test"
 
@@ -331,7 +331,7 @@ function! SwitchFZFMode()
         normal A
     endif
 endfunction
-autocmd FileType fzf tnoremap <silent> <space><space> <C-\><C-N>:call SwitchFZFMode()<CR>
+autocmd FileType fzf tnoremap <silent> <C-P> <C-\><C-N>:call SwitchFZFMode()<CR>
 
 " Toggle comment (actually maps <C-/>)
 nmap <C-_> gcc
@@ -341,6 +341,7 @@ vmap <C-_> gc
 map , <Plug>(easymotion-prefix)
 map ,, <Plug>(easymotion-bd-w)
 map ,f <Plug>(easymotion-bd-f)
+let g:EasyMotion_smartcase = 1
 
 " LSP
 nnoremap gd :GotoDefinition<CR>
@@ -351,6 +352,7 @@ nnoremap <silent> <F1> :call CocAction('doHover')<CR>
 inoremap <silent><expr> <c-space> coc#refresh()
 nmap <silent> <space>E <Plug>(coc-diagnostic-prev)
 nmap <silent> <space>e <Plug>(coc-diagnostic-next)
+nnoremap <A-CR> :CocAction<CR>
 
 " Leave terminal insert mode
 tnoremap <C-n><C-n> <C-\><C-n>
