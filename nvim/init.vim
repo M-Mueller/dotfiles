@@ -353,6 +353,7 @@ inoremap <silent><expr> <c-space> coc#refresh()
 nmap <silent> <space>E <Plug>(coc-diagnostic-prev)
 nmap <silent> <space>e <Plug>(coc-diagnostic-next)
 nnoremap <A-CR> :CocAction<CR>
+nnoremap <leader>f :Format<CR>
 
 " Leave terminal insert mode
 tnoremap <C-n><C-n> <C-\><C-n>
