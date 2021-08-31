@@ -34,5 +34,8 @@
 	tabwidth = 4
 	expandtab = false
 	theme = default
+	startupmode = list
 [init]
 	defaultBranch = main
+[pull]
+	rebase = true
