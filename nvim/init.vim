@@ -19,9 +19,13 @@ Plug 'PeterRincker/vim-argumentative'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'mbbill/undotree'
 Plug 'preservim/tagbar'
-if has('nvim')
-    Plug 'neoclide/coc.nvim', {'branch': 'release'}
-endif
+
+" LSP
+Plug 'neovim/nvim-lspconfig'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/nvim-cmp'
 
 " eye candy
 Plug 'arcticicestudio/nord-vim'
@@ -34,26 +38,75 @@ Plug 'davidhalter/jedi-vim'
 
 " Web
 Plug 'othree/csscomplete.vim'
+
+" fsharp
+Plug 'ionide/Ionide-vim'
 call plug#end()
 
 " -----------
 " Plugin config
 " -----------
 
-if has('nvim')
-    " completion is provided by other plugin
-    let g:jedi#completions_enabled = 0
-    let g:jedi#max_doc_height = 15
+" LSP
+set completeopt=menu,menuone,noselect
 
-    " unassign shortcuts
-    let g:jedi#goto_command = ""
-    let g:jedi#goto_assignments_command = ""
-    let g:jedi#goto_definitions_command = ""
-    let g:jedi#documentation_command = ""
-    let g:jedi#usages_command = ""
-    let g:jedi#completions_command = ""
-    let g:jedi#rename_command = ""
-endif
+lua << EOF
+local has_words_before = function()
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match('%s') == nil
+end
+
+local cmp = require'cmp'
+cmp.setup({
+    mapping = {
+        ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+        ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+        ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+        ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        ['<Tab>'] = function(fallback)
+          if not cmp.select_next_item() then
+              fallback()
+          end
+        end,
+        ['<S-Tab>'] = function(fallback)
+          if not cmp.select_prev_item() then
+              fallback()
+          end
+        end,
+    },
+    sources = cmp.config.sources({
+        { name = 'nvim_lsp' },
+        {
+            name = 'buffer',
+            get_bufnrs = function()
+                return vim.api.nvim_list_bufs()
+            end
+        },
+        { name = 'path' },
+    })
+})
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+require'lspconfig'.fsautocomplete.setup {
+    cmd = { "dotnet", "/home/markus/Applications/FsAutoComplete/fsautocomplete.dll", "--background-service-enabled" },
+    capabilities = capabilities,
+}
+require'lspconfig'.jedi_language_server.setup{}
+EOF
+
+
+" completion is provided by other plugin
+let g:jedi#completions_enabled = 0
+let g:jedi#max_doc_height = 15
+
+" unassign shortcuts
+let g:jedi#goto_command = ""
+let g:jedi#goto_assignments_command = ""
+let g:jedi#goto_definitions_command = ""
+let g:jedi#documentation_command = ""
+let g:jedi#usages_command = ""
+let g:jedi#completions_command = ""
+let g:jedi#rename_command = ""
 
 " NERDTree config
 let NERDTreeIgnore=['\.pyc$', '\~$', '__pycache__']
@@ -126,6 +179,10 @@ endif
 let g:elm_setup_keybindings = 0
 let g:elm_format_fail_silently = 0
 
+" fsharp
+let g:fsharp#backend = "disable"
+let g:fsharp#fsi_keymap = "none"
+
 " ------------
 " Color Config
 " ------------
@@ -141,10 +198,10 @@ exec "autocmd ColorScheme * highlight Typedef guifg=" . g:terminal_color_14
 autocmd ColorScheme * highlight VirtualError guifg=#754852
 autocmd ColorScheme * highlight VirtualTodo guifg=#786E5B
 
-highlight link CocErrorVirtualText VirtualError
-highlight link CocWarningVirtualText VirtualTodo
-highlight link CocInfoVirtualText VirtualTodo
-highlight link CocHintVirtualText VirtualTodo
+highlight link LspDiagnosticsDefaultError VirtualError
+highlight link LspDiagnosticsDefaultWarning VirtualTodo
+highlight link LspDiagnosticsDefaultInfo VirtualTodo
+highlight link LspDiagnosticsDefaultHint VirtualTodo
 
 " -----------
 " Misc config
@@ -189,13 +246,11 @@ set foldlevel=99
 " Keep persistent undotree
 set undofile
 
-if has('nvim')
-    " preview :substitude command
-    set inccommand=split
+" preview :substitude command
+set inccommand=split
 
-    " start terminal in insert mode
-    autocmd TermOpen * startinsert
-endif
+" start terminal in insert mode
+autocmd TermOpen * startinsert
 
 " show whitespace characters
 set list
@@ -346,14 +401,16 @@ let g:EasyMotion_smartcase = 1
 " LSP
 nnoremap gd :GotoDefinition<CR>
 nnoremap gh :GotoHeader<CR>
-nnoremap <silent> <F2> :call CocAction('rename')<CR>
-nnoremap <silent> <F1> :call CocAction('doHover')<CR>
-" Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-space> coc#refresh()
-nmap <silent> <space>E <Plug>(coc-diagnostic-prev)
-nmap <silent> <space>e <Plug>(coc-diagnostic-next)
-nnoremap <A-CR> :CocAction<CR>
-nnoremap <leader>f :Format<CR>
+nnoremap <silent> <F1> :lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> <F2> :lua vim.lsp.buf.rename()<CR>
+nmap <silent> <space>E :lua vim.diagnostic.goto_prev()<CR>
+nmap <silent> <space>e :lua vim.diagnostic.goto_next()
+nnoremap <A-CR> :lua vim.lsp.buf.code_action()<CR>
+nnoremap <leader>f :lua vim.lsp.buf.formatting()<CR>
+
+command! GotoDefinition :lua vim.lsp.buf.definition()<CR>
+command! FindReferences :lua vim.lsp.buf.references()<CR>
+command! -nargs=0 Format :lua vim.lsp.buf.formatting()<CR>
 
 " Leave terminal insert mode
 tnoremap <C-n><C-n> <C-\><C-n>
@@ -362,15 +419,8 @@ tnoremap <C-n><C-n> <C-\><C-n>
 nnoremap <F7> :make<CR>
 nnoremap <F8> :execute b:testprg<CR>
 
-" Run the current file through pythons unittest
-command! -nargs=* PythonTest :!python3 -m pytest <f-args> %
-" Run all tests in the tests directory of the working directory
-command! -nargs=* PythonTestAll :!python3 -m pytest
-" Run doctest on the current file
-command! -nargs=* PythonDocTest :!python3 -m doctest %
+autocmd FileType fsharp noremap <leader>I :FsiEvalBuffer<CR>
+autocmd FileType fsharp vnoremap <leader>i :call fsharp#sendSelectionToFsi()<cr><esc>
+autocmd FileType fsharp nnoremap <leader>i :call fsharp#sendLineToFsi()<cr>
 
-command! GotoDefinition :call CocAction('jumpDefinition')
-command! FindReferences :call CocAction('jumpReferences')
-command! GotoHeader execute 'edit' CocRequest('clangd', 'textDocument/switchSourceHeader', {'uri': 'file://'.expand("%:p")})
-command! -nargs=0 Format :call CocAction('format')
 command! EditConfig :e ~/.config/nvim/init.vim
