@@ -78,11 +78,10 @@ cmp.setup({
         {
             name = 'buffer',
             option = {
-                keyword_pattern = [[\k\+]],
+                get_bufnrs = function()
+                    return vim.api.nvim_list_bufs()
+                end,
             },
-            get_bufnrs = function()
-                return vim.api.nvim_list_bufs()
-            end,
         },
         { name = 'path' },
     })
@@ -326,6 +325,9 @@ autocmd FileType rust setlocal
 autocmd FileType rust let
     \ b:testprg="!cargo test"
 
+" Format on save
+autocmd BufWritePre *.py lua vim.lsp.buf.formatting()
+
 " -------------
 " Abbreviations
 " -------------
@@ -442,7 +444,7 @@ function! Runtests()
     let oldmakeprg = &l:makeprg
     try
         let &makeprg = b:testprg
-        :make
+        :make!
     finally
         let &l:makeprg = oldmakeprg
     endtry
