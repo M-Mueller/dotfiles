@@ -18,7 +18,6 @@ Plug 'mg979/vim-visual-multi'
 Plug 'PeterRincker/vim-argumentative'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'mbbill/undotree'
-Plug 'preservim/tagbar'
 
 " LSP
 Plug 'neovim/nvim-lspconfig'
@@ -26,15 +25,15 @@ Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/nvim-cmp'
+Plug 'simrat39/symbols-outline.nvim'
+Plug 'ojroques/nvim-lspfuzzy'
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'folke/trouble.nvim'
 
 " eye candy
 Plug 'arcticicestudio/nord-vim'
 Plug 'RRethy/vim-illuminate'
 Plug 'psliwka/vim-smoothie'
-
-" Python
-Plug 'vim-scripts/indentpython.vim'
-Plug 'davidhalter/jedi-vim'
 
 " Web
 Plug 'othree/csscomplete.vim'
@@ -56,7 +55,7 @@ local has_words_before = function()
   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match('%s') == nil
 end
 
-local cmp = require'cmp'
+local cmp = require('cmp')
 cmp.setup({
     mapping = {
         ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
@@ -78,20 +77,35 @@ cmp.setup({
         { name = 'nvim_lsp' },
         {
             name = 'buffer',
+            option = {
+                keyword_pattern = [[\k\+]],
+            },
             get_bufnrs = function()
                 return vim.api.nvim_list_bufs()
-            end
+            end,
         },
         { name = 'path' },
     })
 })
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
-require'lspconfig'.fsautocomplete.setup {
+require('lspconfig').fsautocomplete.setup {
     cmd = { "dotnet", "/home/markus/Applications/FsAutoComplete/fsautocomplete.dll", "--background-service-enabled" },
     capabilities = capabilities,
 }
-require'lspconfig'.jedi_language_server.setup{}
+require('lspconfig').pylsp.setup{}
+require('lspconfig').clangd.setup{
+    cmd = { "clangd-12" },
+}
+
+local lspfuzzy = require('lspfuzzy')
+lspfuzzy.setup {
+  methods = 'all',
+  jump_one = true,
+  save_last = false,
+}
+
+require("trouble").setup{}
 EOF
 
 
@@ -294,7 +308,10 @@ autocmd FileType fsharp setlocal
     \ errorformat=%f(%l\\,%c):\ error\ FS%n:\ %m
     \ commentstring=//\ %s
 autocmd FileType fsharp let
-    \ b:testprg="!dotnet test"
+    \ b:testprg="dotnet\ test"
+
+autocmd FileType python let
+    \ b:testprg="python3\ -m\ pytest"
 
 if executable("jq")
     " Reformat elm make errors to a single line
@@ -404,20 +421,34 @@ nnoremap gh :GotoHeader<CR>
 nnoremap <silent> <F1> :lua vim.lsp.buf.hover()<CR>
 nnoremap <silent> <F2> :lua vim.lsp.buf.rename()<CR>
 nmap <silent> <space>E :lua vim.diagnostic.goto_prev()<CR>
-nmap <silent> <space>e :lua vim.diagnostic.goto_next()
+nmap <silent> <space>e :lua vim.diagnostic.goto_next()<CR>
 nnoremap <A-CR> :lua vim.lsp.buf.code_action()<CR>
 nnoremap <leader>f :lua vim.lsp.buf.formatting()<CR>
+nnoremap <leader>s :LspDocumentSymbols<CR>
 
 command! GotoDefinition :lua vim.lsp.buf.definition()<CR>
 command! FindReferences :lua vim.lsp.buf.references()<CR>
 command! -nargs=0 Format :lua vim.lsp.buf.formatting()<CR>
+command! LspDocumentSymbols :lua vim.lsp.buf.document_symbol()<CR>
 
 " Leave terminal insert mode
 tnoremap <C-n><C-n> <C-\><C-n>
 
-" building and testing
+" Building and testing
 nnoremap <F7> :make<CR>
-nnoremap <F8> :execute b:testprg<CR>
+
+" Run the tests with make so that results are added to the quickfix list
+function! Runtests()
+    let oldmakeprg = &l:makeprg
+    try
+        let &makeprg = b:testprg
+        :make
+    finally
+        let &l:makeprg = oldmakeprg
+    endtry
+endfunction
+
+nnoremap <F8> :call Runtests()<CR>
 
 autocmd FileType fsharp noremap <leader>I :FsiEvalBuffer<CR>
 autocmd FileType fsharp vnoremap <leader>i :call fsharp#sendSelectionToFsi()<cr><esc>
