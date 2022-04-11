@@ -7,6 +7,7 @@ set --export VISUAL "vim"
 set --export PAGER "less"
 
 set --export VIRTUAL_ENV_DISABLE_PROMPT 1
+set --export DOTNET_CLI_TELEMETRY_OPTOUT 1
 
 alias ls="ls --color=auto"
 alias lsl="ls -l"
