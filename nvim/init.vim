@@ -13,7 +13,6 @@ Plug 'FooSoft/vim-argwrap'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/gv.vim'
-Plug 'sheerun/vim-polyglot'
 Plug 'mg979/vim-visual-multi'
 Plug 'PeterRincker/vim-argumentative'
 Plug 'stefandtw/quickfix-reflector.vim'
@@ -31,15 +30,19 @@ Plug 'kyazdani42/nvim-web-devicons'
 Plug 'folke/trouble.nvim'
 
 " eye candy
-Plug 'arcticicestudio/nord-vim'
+Plug 'gruvbox-community/gruvbox'
 Plug 'RRethy/vim-illuminate'
 Plug 'psliwka/vim-smoothie'
+Plug 'sunjon/shade.nvim'
 
 " Web
 Plug 'othree/csscomplete.vim'
 
-" fsharp
+" F#
 Plug 'ionide/Ionide-vim'
+
+" Go
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 call plug#end()
 
 " -----------
@@ -96,6 +99,7 @@ require('lspconfig').pylsp.setup{}
 require('lspconfig').clangd.setup{
     cmd = { "clangd-12" },
 }
+require('lspconfig').gopls.setup{}
 
 local lspfuzzy = require('lspfuzzy')
 lspfuzzy.setup {
@@ -105,6 +109,13 @@ lspfuzzy.setup {
 }
 
 require("trouble").setup{}
+
+if not vim.g.fvim_loaded then
+    require'shade'.setup({
+      overlay_opacity = 60,
+      opacity_step = 1,
+    })
+end
 EOF
 
 
@@ -127,7 +138,7 @@ let NERDTreeIgnore=['\.pyc$', '\~$', '__pycache__']
 " lightline config
 set noshowmode
 let g:lightline = {
-      \ 'colorscheme': 'nord',
+      \ 'colorscheme': 'gruvbox',
       \ 'component_function': {
       \   'filename': 'FilenameForLightline'
       \ }
@@ -199,22 +210,22 @@ let g:fsharp#fsi_keymap = "none"
 " ------------
 " Color Config
 " ------------
-colorscheme nord
+set background=light
+let g:gruvbox_contrast_dark = 'hard'
+colorscheme gruvbox
 set termguicolors
-let g:nord_cursor_line_number_background = 1
 
-" use nord7_gui to emphasize types (g:terminal_color_14 is s:nord7_gui)
-exec "autocmd ColorScheme * highlight Type guifg=" . g:terminal_color_14
-exec "autocmd ColorScheme * highlight Typedef guifg=" . g:terminal_color_14
+" exec "autocmd ColorScheme * highlight Type guifg=" . g:terminal_color_14
+" exec "autocmd ColorScheme * highlight Typedef guifg=" . g:terminal_color_14
 
 " blend virtual text with background
-autocmd ColorScheme * highlight VirtualError guifg=#754852
-autocmd ColorScheme * highlight VirtualTodo guifg=#786E5B
+" autocmd ColorScheme * highlight VirtualError guifg=#754852
+" autocmd ColorScheme * highlight VirtualTodo guifg=#786E5B
 
-highlight link LspDiagnosticsDefaultError VirtualError
-highlight link LspDiagnosticsDefaultWarning VirtualTodo
-highlight link LspDiagnosticsDefaultInfo VirtualTodo
-highlight link LspDiagnosticsDefaultHint VirtualTodo
+" highlight link LspDiagnosticsDefaultError VirtualError
+" highlight link LspDiagnosticsDefaultWarning VirtualTodo
+" highlight link LspDiagnosticsDefaultInfo VirtualTodo
+" highlight link LspDiagnosticsDefaultHint VirtualTodo
 
 " -----------
 " Misc config
