@@ -33,7 +33,6 @@ Plug 'folke/trouble.nvim'
 Plug 'gruvbox-community/gruvbox'
 Plug 'RRethy/vim-illuminate'
 Plug 'psliwka/vim-smoothie'
-Plug 'sunjon/shade.nvim'
 
 " Web
 Plug 'othree/csscomplete.vim'
@@ -109,13 +108,6 @@ lspfuzzy.setup {
 }
 
 require("trouble").setup{}
-
-if not vim.g.fvim_loaded then
-    require'shade'.setup({
-      overlay_opacity = 60,
-      opacity_step = 1,
-    })
-end
 EOF
 
 
