@@ -17,6 +17,7 @@ Plug 'mg979/vim-visual-multi'
 Plug 'PeterRincker/vim-argumentative'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'mbbill/undotree'
+Plug 'vim-test/vim-test'
 
 " LSP
 Plug 'neovim/nvim-lspconfig'
@@ -190,6 +191,9 @@ if exists('*nvim_open_win')
         call nvim_open_win(buf, v:true, opts)
     endfunction
 endif
+
+" vim-test
+let test#strategy = "make_bang"
 
 " elm
 let g:elm_setup_keybindings = 0
@@ -453,7 +457,7 @@ function! Runtests()
     endtry
 endfunction
 
-nnoremap <F8> :call Runtests()<CR>
+nnoremap <F8> :TestLast()<CR>
 
 autocmd FileType fsharp noremap <leader>I :FsiEvalBuffer<CR>
 autocmd FileType fsharp vnoremap <leader>i :call fsharp#sendSelectionToFsi()<cr><esc>
