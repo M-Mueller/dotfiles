@@ -112,6 +112,9 @@ lspfuzzy.setup {
 require("trouble").setup{}
 EOF
 
+" Show diagnostics when moving over a line with errors
+set updatetime=300
+autocmd CursorHold * lua vim.diagnostic.open_float({ scope = 'cursor', focusable = false })
 
 " completion is provided by other plugin
 let g:jedi#completions_enabled = 0
