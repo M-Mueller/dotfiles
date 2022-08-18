@@ -101,6 +101,7 @@ require('lspconfig').clangd.setup{
     cmd = { "clangd-12" },
 }
 require('lspconfig').gopls.setup{}
+require('lspconfig').elmls.setup{}
 
 local lspfuzzy = require('lspfuzzy')
 lspfuzzy.setup {
@@ -345,6 +346,7 @@ autocmd BufWritePre *.py lua vim.lsp.buf.formatting()
 
 abbr esle else
 abbr retrun return
+abbr maintance maintenance
 
 " -----------
 " Key mapping
@@ -448,7 +450,7 @@ command! LspDocumentSymbols :lua vim.lsp.buf.document_symbol()<CR>
 tnoremap <C-n><C-n> <C-\><C-n>
 
 " Building and testing
-nnoremap <F7> :make<CR>
+nnoremap <F7> :make!<CR>
 
 " Run the tests with make so that results are added to the quickfix list
 function! Runtests()
