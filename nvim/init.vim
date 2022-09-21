@@ -21,7 +21,10 @@ Plug 'vim-test/vim-test'
 
 " LSP
 Plug 'neovim/nvim-lspconfig'
-Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/nvim-cmp'
 Plug 'simrat39/symbols-outline.nvim'
 Plug 'ojroques/nvim-lspfuzzy'
 Plug 'kyazdani42/nvim-web-devicons'
@@ -55,6 +58,40 @@ local has_words_before = function()
   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match('%s') == nil
 end
 
+local cmp = require('cmp')
+cmp.setup({
+    preselect = cmp.PreselectMode.None,
+    mapping = {
+        ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+        ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+        ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+        ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        ['<Tab>'] = function(fallback)
+          if not cmp.select_next_item() then
+              fallback()
+          end
+        end,
+        ['<S-Tab>'] = function(fallback)
+          if not cmp.select_prev_item() then
+              fallback()
+          end
+        end,
+    },
+    sources = cmp.config.sources({
+        { name = 'nvim_lsp' },
+        {
+            name = 'buffer',
+            option = {
+                get_bufnrs = function()
+                    return vim.api.nvim_list_bufs()
+                end,
+            },
+        },
+        { name = 'path' },
+    })
+})
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+
 require('lspconfig').fsautocomplete.setup {
     cmd = { "dotnet", "/home/markus/Applications/FsAutoComplete/fsautocomplete.dll", "--background-service-enabled" },
     capabilities = capabilities,
@@ -73,8 +110,6 @@ lspfuzzy.setup {
 
 require("trouble").setup{}
 EOF
-
-let g:coq_settings = { "coq_settings.keymap.jump_to_mark": "" }
 
 " Show diagnostics when moving over a line with errors
 set updatetime=300
