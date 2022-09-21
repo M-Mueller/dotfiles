@@ -3,5 +3,7 @@
 __pycache__/
 .mypy_cache
 .pytest_cache
+.cache/
 CMakeLists.txt.user
 tags
+compile_commands.json
