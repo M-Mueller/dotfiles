@@ -1,0 +1,65 @@
+" ideavim plugins
+Plug 'vim-surround'
+Plug 'vim-easymotion'
+Plug 'vim-multiple-cursors'
+
+" -----------
+" Misc config
+" -----------
+set number
+set relativenumber
+
+set scrolloff=5
+set splitright
+
+" ignore case if search is only lowercase
+set ignorecase
+set smartcase
+
+set hlsearch
+set incsearch
+
+" -------------
+" Abbreviations
+" -------------
+
+abbr esle else
+abbr retrun return
+abbr maintance maintenance
+
+" -----------
+" Key mapping
+" -----------
+
+" Set leader to space
+let mapleader = " "
+
+" Window navigations with ctrl
+nnoremap <C-J> <C-W>j
+nnoremap <C-K> <C-W>k
+nnoremap <C-L> <C-W>l
+nnoremap <C-H> <C-W>h
+
+" Paste from clipboard in insert mode
+sethandler <C-V> n-v:vim i:ide
+" Copy to clipboard in visual mode
+vnoremap <C-C> "+y
+
+sethandler <C-S> a:ide
+
+" Copy to end of line
+map <silent> Y y$
+
+" switch to previous buffer
+nnoremap <leader><Tab> :b#<CR>
+
+" EasyMotion
+map , <Plug>(easymotion-prefix)
+map ,, <Plug>(easymotion-bd-w)
+map ,f <Plug>(easymotion-bd-f)
+let g:EasyMotion_smartcase = 1
+
+nmap <leader>f <Action>(Tool_External Tools_Black)
+
+" ideavim stuff
+set ideajoin
