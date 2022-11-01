@@ -320,7 +320,7 @@ endif
 " Filetype config
 " ---------------
 
-autocmd FileType javascript,javascriptreact setlocal
+autocmd FileType html,javascript,javascriptreact setlocal
     \ tabstop=2
     \ softtabstop=2
     \ shiftwidth=2
