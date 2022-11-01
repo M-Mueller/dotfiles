@@ -343,24 +343,12 @@ autocmd FileType fsharp setlocal
     \ makeprg=dotnet\ build
     \ errorformat=%f(%l\\,%c):\ error\ FS%n:\ %m
     \ commentstring=//\ %s
-autocmd FileType fsharp let
-    \ b:testprg="dotnet\ test"
 
-autocmd FileType python let
-    \ b:testprg="python3\ -m\ pytest"
-
-if executable("jq")
-    " Reformat elm make errors to a single line
-    autocmd FileType elm setlocal
-        \ makeprg=elm\ make\ --output=/dev/null\ src/Main.elm
-    autocmd FileType elm let
-        \ b:testprg=":term elm-test"
-endif
+autocmd FileType elm setlocal
+    \ makeprg=elm\ make\ --output=/dev/null\ src/Main.elm
 
 autocmd FileType rust setlocal
     \ makeprg=cargo\ build
-autocmd FileType rust let
-    \ b:testprg="!cargo test"
 
 " Format on save
 autocmd BufWritePre *.py lua vim.lsp.buf.formatting()
@@ -476,18 +464,6 @@ tnoremap <C-n><C-n> <C-\><C-n>
 
 " Building and testing
 nnoremap <F7> :make!<CR>
-
-" Run the tests with make so that results are added to the quickfix list
-function! Runtests()
-    let oldmakeprg = &l:makeprg
-    try
-        let &makeprg = b:testprg
-        :make!
-    finally
-        let &l:makeprg = oldmakeprg
-    endtry
-endfunction
-
 nnoremap <F8> :TestLast()<CR>
 
 autocmd FileType fsharp noremap <leader>I :FsiEvalBuffer<CR>
