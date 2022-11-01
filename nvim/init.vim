@@ -352,6 +352,7 @@ autocmd FileType rust setlocal
 
 " Format on save
 autocmd BufWritePre *.py lua vim.lsp.buf.formatting()
+autocmd BufWritePre *.elm lua vim.lsp.buf.formatting()
 
 " -------------
 " Abbreviations
