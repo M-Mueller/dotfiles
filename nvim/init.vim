@@ -1,8 +1,6 @@
 " load vim-plug plugins
 call plug#begin()
 Plug 'itchyny/lightline.vim'
-Plug 'scrooloose/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
@@ -18,6 +16,7 @@ Plug 'PeterRincker/vim-argumentative'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'mbbill/undotree'
 Plug 'vim-test/vim-test'
+Plug 'nvim-tree/nvim-tree.lua'
 
 " LSP
 Plug 'neovim/nvim-lspconfig'
@@ -53,6 +52,37 @@ call plug#end()
 set completeopt=menu,menuone,noselect
 
 lua << EOF
+require("nvim-tree").setup({
+    renderer = {
+        icons = {
+            show = {
+                file = false,
+                folder = false,
+                folder_arrow = true,
+                git = true,
+            },
+            glyphs = {
+                folder = {
+                    arrow_closed = ">",
+                    arrow_open = "v",
+                },
+                git = {
+                  unstaged = "✗",
+                  staged = "✓",
+                  unmerged = "⇄",
+                  renamed = "➜",
+                  untracked = "★",
+                  deleted = "d",
+                  ignored = ""
+                }
+            }
+        },
+        indent_markers = {
+            enable = true,
+        }
+    }
+})
+
 local has_words_before = function()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match('%s') == nil
@@ -127,9 +157,6 @@ let g:jedi#documentation_command = ""
 let g:jedi#usages_command = ""
 let g:jedi#completions_command = ""
 let g:jedi#rename_command = ""
-
-" NERDTree config
-let NERDTreeIgnore=['\.pyc$', '\~$', '__pycache__']
 
 " lightline config
 set noshowmode
@@ -386,8 +413,8 @@ nnoremap <leader>x :bp<bar>bd#<CR>
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
-" NERDTree shortcut
-nnoremap <leader>n :NERDTreeToggle<CR>
+" nvim-tree shortcut
+nnoremap <silent> <leader>n :NvimTreeToggle<CR>
 
 " tags shortcut
 nnoremap <leader>t :Tags<CR>
