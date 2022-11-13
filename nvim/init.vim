@@ -8,8 +8,8 @@ Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-surround'
 Plug 'easymotion/vim-easymotion'
 Plug 'FooSoft/vim-argwrap'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
 Plug 'junegunn/gv.vim'
 Plug 'mg979/vim-visual-multi'
 Plug 'PeterRincker/vim-argumentative'
@@ -25,7 +25,6 @@ Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'simrat39/symbols-outline.nvim'
-Plug 'ojroques/nvim-lspfuzzy'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'folke/trouble.nvim'
 
@@ -131,13 +130,6 @@ require('lspconfig').clangd.setup{}
 require('lspconfig').gopls.setup{}
 require('lspconfig').elmls.setup{}
 
-local lspfuzzy = require('lspfuzzy')
-lspfuzzy.setup {
-  methods = 'all',
-  jump_one = true,
-  save_last = false,
-}
-
 require("trouble").setup{}
 EOF
 
@@ -171,56 +163,6 @@ let g:lightline = {
 function! FilenameForLightline()
     return expand('%')
 endfunction
-
-" fzf
-" Show preview in Ag
-command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(<q-args>, <bang>0)
-command! -bang -nargs=* Ag
-  \ call fzf#vim#ag(<q-args>, fzf#vim#with_preview(), <bang>0)
-
-" List buffers to delete
-function! s:list_buffers()
-  redir => list
-  silent ls
-  redir END
-  return split(list, "\n")
-endfunction
-
-function! s:delete_buffers(lines)
-  execute 'bdelete' join(map(a:lines, {_, line -> split(line)[0]}))
-endfunction
-
-command! BD call fzf#run(fzf#wrap({
-  \ 'source': s:list_buffers(),
-  \ 'sink*': { lines -> s:delete_buffers(lines) },
-  \ 'options': '--multi --bind ctrl-a:select-all+accept'
-\ }))
-
-if exists('*nvim_open_win')
-    " show in floating window if available
-    let $FZF_DEFAULT_OPTS='--margin=1,2'
-    let g:fzf_layout = { 'window': 'call FloatingFZF()' }
-
-    function! FloatingFZF()
-        let buf = nvim_create_buf(v:false, v:true)
-        call setbufvar(buf, '&signcolumn', 'no')
-
-        let height = &lines/2
-        let width = float2nr(&columns - (&columns * 1 / 10))
-        let col = float2nr((&columns - width) / 2)
-
-        let opts = {
-                    \ 'relative': 'editor',
-                    \ 'row': 8,
-                    \ 'col': col,
-                    \ 'width': width,
-                    \ 'height': height
-                    \ }
-
-        call nvim_open_win(buf, v:true, opts)
-    endfunction
-endif
 
 " vim-test
 let test#strategy = "make_bang"
@@ -409,30 +351,9 @@ nnoremap <silent> <leader>n :NvimTreeToggle<CR>
 nnoremap <leader>t :Tags<CR>
 
 " Fuzzy finder
-nnoremap <C-p> :Files<CR>
-nnoremap <leader>p :Files<CR>
-nnoremap <leader><space> :Buffers<CR>
-
-" Switch FZF to Files mode
-function! SwitchFZFMode()
-    " copy everything until the cursor position into register z
-    normal v0"zy
-    if matchstr(@z, 'Buf>') != ""
-        " copy text after 'Buf>' and trim whitespace
-        let query = substitute(@z, '\s*Buf>\s*\(.\{-}\)\s*$', '\1', 'g')
-        " close current fzf window
-        q
-        " need to wait before launching :Files
-        sleep 10m
-        Files
-        " enter the previously copied text as search
-        call feedkeys(l:query, 't')
-    else
-        " ignore in non buffer modes and go back to insert
-        normal A
-    endif
-endfunction
-autocmd FileType fzf tnoremap <silent> <C-P> <C-\><C-N>:call SwitchFZFMode()<CR>
+nnoremap <C-p> :Telescope find_files<CR>
+nnoremap <leader>p :Telescope find_files<CR>
+nnoremap <leader><space> :Telescope buffers<CR>
 
 " Toggle comment (actually maps <C-/>)
 nmap <C-_> gcc
