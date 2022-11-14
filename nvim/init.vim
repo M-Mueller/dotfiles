@@ -47,108 +47,14 @@ call plug#end()
 " Plugin config
 " -----------
 
+lua require("basic")
+
 " LSP
 set completeopt=menu,menuone,noselect
-
-lua << EOF
-require("nvim-tree").setup({
-    renderer = {
-        icons = {
-            show = {
-                file = false,
-                folder = false,
-                folder_arrow = true,
-                git = true,
-            },
-            glyphs = {
-                folder = {
-                    arrow_closed = ">",
-                    arrow_open = "v",
-                },
-                git = {
-                  unstaged = "✗",
-                  staged = "✓",
-                  unmerged = "⇄",
-                  renamed = "➜",
-                  untracked = "★",
-                  deleted = "d",
-                  ignored = ""
-                }
-            }
-        },
-        indent_markers = {
-            enable = true,
-        }
-    }
-})
-
-local has_words_before = function()
-  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match('%s') == nil
-end
-
-local cmp = require('cmp')
-cmp.setup({
-    preselect = cmp.PreselectMode.None,
-    mapping = {
-        ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
-        ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
-        ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
-        ['<CR>'] = cmp.mapping.confirm({ select = true }),
-        ['<Tab>'] = function(fallback)
-          if not cmp.select_next_item() then
-              fallback()
-          end
-        end,
-        ['<S-Tab>'] = function(fallback)
-          if not cmp.select_prev_item() then
-              fallback()
-          end
-        end,
-    },
-    sources = cmp.config.sources({
-        { name = 'nvim_lsp' },
-        {
-            name = 'buffer',
-            option = {
-                get_bufnrs = function()
-                    return vim.api.nvim_list_bufs()
-                end,
-            },
-        },
-        { name = 'path' },
-    })
-})
-local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
-
-require('lspconfig').fsautocomplete.setup {
-    cmd = { "dotnet", "/home/markus/Applications/FsAutoComplete/fsautocomplete.dll", "--background-service-enabled" },
-    capabilities = capabilities,
-}
-require('lspconfig').pylsp.setup{}
-require('lspconfig').clangd.setup{}
-require('lspconfig').gopls.setup{}
-require('lspconfig').elmls.setup{}
-
-require("trouble").setup{}
-EOF
 
 " Show diagnostics when moving over a line with errors
 set updatetime=300
 autocmd CursorHold * lua vim.diagnostic.open_float({ scope = 'cursor', focusable = false })
-
-" completion is provided by other plugin
-let g:jedi#completions_enabled = 0
-let g:jedi#max_doc_height = 15
-
-" unassign shortcuts
-let g:jedi#goto_command = ""
-let g:jedi#goto_assignments_command = ""
-let g:jedi#goto_definitions_command = ""
-let g:jedi#documentation_command = ""
-let g:jedi#usages_command = ""
-let g:jedi#completions_command = ""
-let g:jedi#rename_command = ""
 
 " lightline config
 set noshowmode
@@ -182,18 +88,6 @@ set background=light
 let g:gruvbox_contrast_dark = 'hard'
 colorscheme gruvbox
 set termguicolors
-
-" exec "autocmd ColorScheme * highlight Type guifg=" . g:terminal_color_14
-" exec "autocmd ColorScheme * highlight Typedef guifg=" . g:terminal_color_14
-
-" blend virtual text with background
-" autocmd ColorScheme * highlight VirtualError guifg=#754852
-" autocmd ColorScheme * highlight VirtualTodo guifg=#786E5B
-
-" highlight link LspDiagnosticsDefaultError VirtualError
-" highlight link LspDiagnosticsDefaultWarning VirtualTodo
-" highlight link LspDiagnosticsDefaultInfo VirtualTodo
-" highlight link LspDiagnosticsDefaultHint VirtualTodo
 
 " -----------
 " Misc config
