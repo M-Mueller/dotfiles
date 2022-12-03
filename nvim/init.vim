@@ -187,8 +187,9 @@ autocmd FileType rust setlocal
     \ makeprg=cargo\ build
 
 " Format on save
-autocmd BufWritePre *.py lua vim.lsp.buf.formatting()
-autocmd BufWritePre *.elm lua vim.lsp.buf.formatting()
+autocmd BufWritePre *.py lua vim.lsp.buf.format()
+autocmd BufWritePre *.elm lua vim.lsp.buf.format()
+autocmd BufWritePre *.fsx lua vim.lsp.buf.format()
 
 " -------------
 " Abbreviations
@@ -267,12 +268,12 @@ nnoremap <silent> <F2> :lua vim.lsp.buf.rename()<CR>
 nmap <silent> <space>E :lua vim.diagnostic.goto_prev()<CR>
 nmap <silent> <space>e :lua vim.diagnostic.goto_next()<CR>
 nnoremap <A-CR> :lua vim.lsp.buf.code_action()<CR>
-nnoremap <leader>f :lua vim.lsp.buf.formatting()<CR>
+nnoremap <leader>f :lua vim.lsp.buf.format()<CR>
 nnoremap <leader>s :LspDocumentSymbols<CR>
 
 command! GotoDefinition :lua vim.lsp.buf.definition()<CR>
 command! FindReferences :lua vim.lsp.buf.references()<CR>
-command! -nargs=0 Format :lua vim.lsp.buf.formatting()<CR>
+command! -nargs=0 Format :lua vim.lsp.buf.format()<CR>
 command! LspDocumentSymbols :lua vim.lsp.buf.document_symbol()<CR>
 
 " Leave terminal insert mode
