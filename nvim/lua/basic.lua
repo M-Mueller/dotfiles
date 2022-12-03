@@ -64,10 +64,8 @@ cmp.setup({
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
-require('lspconfig').fsautocomplete.setup {
-    cmd = { "dotnet", "/home/markus/Applications/FsAutoComplete/fsautocomplete.dll", "--background-service-enabled" },
-    capabilities = capabilities,
-}
+-- install with: dotnet tool install -g fsautocomplete
+require('lspconfig').fsautocomplete.setup {}
 require('lspconfig').pylsp.setup{}
 require('lspconfig').clangd.setup{}
 require('lspconfig').gopls.setup{}
