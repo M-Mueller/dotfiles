@@ -276,6 +276,9 @@ command! FindReferences :lua vim.lsp.buf.references()<CR>
 command! -nargs=0 Format :lua vim.lsp.buf.format()<CR>
 command! LspDocumentSymbols :lua vim.lsp.buf.document_symbol()<CR>
 
+" Install all LSP packages required for Python
+command! LspInstallPylsp :!pip install python-lsp-server pylsp-mypy python-lsp-black black<CR>
+
 " Leave terminal insert mode
 tnoremap <C-n><C-n> <C-\><C-n>
 
